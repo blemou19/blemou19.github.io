@@ -505,3 +505,107 @@ width:55px;
 }
 
 }
+
+
+/* ===================================================== */
+/* MOBILE NAVIGATION */
+/* ===================================================== */
+
+.menu-toggle{
+display:none;
+font-size:28px;
+cursor:pointer;
+}
+
+/* ===================================================== */
+/* RESPONSIVE DESIGN */
+/* ===================================================== */
+
+@media (max-width:900px){
+
+header{
+flex-direction:row;
+justify-content:space-between;
+}
+
+.menu-toggle{
+display:block;
+}
+
+nav{
+position:absolute;
+top:70px;
+left:0;
+width:100%;
+background:#020617;
+display:none;
+flex-direction:column;
+text-align:center;
+padding:20px 0;
+}
+
+nav a{
+margin:10px 0;
+font-size:18px;
+}
+
+nav.active{
+display:flex;
+}
+
+/* HERO */
+
+.hero{
+height:auto;
+padding:120px 20px;
+}
+
+.hero h2{
+font-size:28px;
+}
+
+.hero p{
+font-size:16px;
+}
+
+/* VIDEO */
+
+video{
+width:100%;
+}
+
+/* SECTIONS */
+
+section{
+padding:80px 20px;
+}
+
+/* PROJECTS */
+
+.project-grid{
+grid-template-columns:1fr;
+}
+
+/* GITHUB */
+
+.github-stats{
+flex-direction:column;
+align-items:center;
+}
+
+.github-stats img{
+width:100%;
+max-width:350px;
+}
+
+/* SKILLS */
+
+.skills-logos{
+gap:25px;
+}
+
+.skills-logos img{
+width:55px;
+}
+
+}
