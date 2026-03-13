@@ -432,3 +432,76 @@ margin-top:40px;
 width:420px;
 border-radius:10px;
 }
+
+
+/* ===================================================== */
+/* RESPONSIVE DESIGN (MOBILE) */
+/* ===================================================== */
+
+@media (max-width: 900px){
+
+/* header */
+
+header{
+flex-direction:column;
+gap:15px;
+text-align:center;
+}
+
+/* navigation */
+
+nav{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:15px;
+}
+
+/* hero */
+
+.hero{
+height:auto;
+padding:100px 20px;
+}
+
+/* sections */
+
+section{
+padding:80px 20px;
+}
+
+/* video */
+
+video{
+width:100%;
+}
+
+/* project grid */
+
+.project-grid{
+grid-template-columns:1fr;
+}
+
+/* github stats */
+
+.github-stats{
+flex-direction:column;
+align-items:center;
+}
+
+.github-stats img{
+width:100%;
+max-width:400px;
+}
+
+/* skills logos */
+
+.skills-logos{
+gap:25px;
+}
+
+.skills-logos img{
+width:55px;
+}
+
+}
