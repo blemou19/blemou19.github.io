@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+<title>Customer Churn Prediction</title>
+
+<link rel="stylesheet" href="../style.css">
+
+</head>
+
+<body>
+
+<header class="project-header">
+
+<h1>Customer Churn Prediction</h1>
+
+<a class="btn-back" href="../index.html">← Retour au portfolio</a>
+
+</header>
+
+
+
+<section class="project-intro">
+
+<h2>Introduction</h2>
+
+<p>
+
+Ce projet analyse l’impact du <strong>data drift</strong> sur un modèle de
+prédiction du churn client. L'objectif est de comprendre comment l’évolution
+des données dans le temps influence la performance du modèle et de proposer
+une stratégie d’adaptation afin de maintenir un niveau de performance élevé.
+
+</p>
+
+<p>
+
+Le projet inclut une analyse exploratoire des données, une comparaison de
+modèles de machine learning ainsi qu’une optimisation du seuil de décision
+en tenant compte des coûts métier.
+
+</p>
+
+</section>
+
+
+
+<section class="tech-section">
+
+<h2>Technologies utilisées</h2>
+
+<div class="tech-stack">
+
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg">
+
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg">
+
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg">
+
+</div>
+
+<div class="tech-list">
+
+<ul>
+
+<li><strong>Python</strong> — développement du pipeline de machine learning</li>
+
+<li><strong>Pandas</strong> — manipulation et nettoyage des données</li>
+
+<li><strong>NumPy</strong> — calcul numérique</li>
+
+<li><strong>Scikit-learn</strong> — entraînement et évaluation des modèles</li>
+
+<li><strong>Matplotlib / Seaborn</strong> — visualisation des données</li>
+
+</ul>
+
+</div>
+
+</section>
+
+
+
+<section class="results">
+
+<h2>Résultats clés</h2>
+
+<div class="results-grid">
+
+<div class="result-card">
+<h3>AUC du modèle</h3>
+<p>≈ 0.878</p>
+</div>
+
+<div class="result-card">
+<h3>Modèle retenu</h3>
+<p>Random Forest</p>
+</div>
+
+<div class="result-card">
+<h3>Réduction du coût</h3>
+<p>≈ 36.5%</p>
+</div>
+
+<div class="result-card">
+<h3>Stratégie</h3>
+<p>Rolling Retraining</p>
+</div>
+
+</div>
+
+</section>
+
+
+
+<section class="project-section">
+
+<h2>1. Evolution du taux de churn</h2>
+
+<div class="graph-card">
+
+<img src="../assets/asset_churn/fig_01_taux_churn_par_periode.png">
+
+<p class="graph-desc">
+
+L’analyse montre une augmentation progressive du taux de churn au fil
+du temps. Cette évolution suggère un changement dans le comportement
+des clients et met en évidence la présence d’un phénomène de
+<strong>data drift</strong>.
+
+</p>
+
+</div>
+
+</section>
+
+
+
+<section class="project-section">
+
+<h2>2. Analyse des valeurs manquantes</h2>
+
+<div class="graph-card">
+
+<img src="../assets/asset_churn/fig_05_valeurs_manquantes_class_churn.png">
+
+<p class="graph-desc">
+
+L’analyse des valeurs manquantes montre que certaines variables
+présentent davantage de données manquantes pour les clients ayant churn,
+ce qui peut indiquer une relation entre la qualité des données et
+le comportement des clients.
+
+</p>
+
+</div>
+
+</section>
+
+
+
+<section class="project-section">
+
+<h2>3. Sélection de la fenêtre historique</h2>
+
+<div class="graph-card">
+
+<img src="../assets/asset_churn/fig_08_selection_fenetre_historique_w.png">
+
+<p class="graph-desc">
+
+Le backtesting réalisé pour différentes tailles de fenêtre permet
+d’identifier la stratégie d'entraînement optimale.
+Une fenêtre de <strong>w = 12 périodes</strong> offre le meilleur
+compromis entre stabilité du modèle et capacité d’adaptation au drift.
+
+</p>
+
+</div>
+
+</section>
+
+
+
+<section class="project-section">
+
+<h2>4. Optimisation du seuil et coût métier</h2>
+
+<div class="graph-card">
+
+<img src="../assets/asset_churn/fig_10_optimisation_seuil_cout_metier.png">
+
+<p class="graph-desc">
+
+L’optimisation du seuil de décision prend en compte les coûts métier :
+
+</p>
+
+<ul>
+
+<li>Faux négatif : 100 €</li>
+<li>Faux positif : 40 €</li>
+
+</ul>
+
+<p class="graph-desc">
+
+Le seuil optimal estimé à <strong>0.077</strong> permet une réduction
+du coût métier d’environ <strong>36.5%</strong>.
+
+</p>
+
+</div>
+
+</section>
+
+
+
+<section class="skills-learned">
+
+<h2>Compétences développées</h2>
+
+<ul>
+
+<li>Analyse exploratoire de données (EDA)</li>
+
+<li>Détection et analyse du data drift</li>
+
+<li>Comparaison de modèles de machine learning</li>
+
+<li>Backtesting temporel</li>
+
+<li>Optimisation du seuil de classification</li>
+
+<li>Analyse du coût métier</li>
+
+<li>Visualisation de données</li>
+
+</ul>
+
+</section>
+
+
+
+<section class="resources">
+
+<h2>Ressources</h2>
+
+<div class="resource-buttons">
+
+<a class="btn-resource" href="../assets/asset_churn/Rapport_Churn.pdf" target="_blank">
+📄 Rapport du projet
+</a>
+
+<a class="btn-resource github" href="https://github.com/blemou19/churn-prediction-project" target="_blank">
+💻 Code GitHub
+</a>
+
+</div>
+
+</section>
+
+
+</body>
+
+</html>
