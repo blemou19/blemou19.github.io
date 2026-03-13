@@ -1,3 +1,7 @@
+/* ===================================================== */
+/* GLOBAL STYLE */
+/* ===================================================== */
+
 body{
 font-family:Inter;
 margin:0;
@@ -5,17 +9,32 @@ background:#0f172a;
 color:white;
 }
 
+/* ===================================================== */
+/* HEADER / NAVIGATION */
+/* ===================================================== */
+
 header{
 display:flex;
 justify-content:space-between;
 padding:20px 10%;
+align-items:center;
 }
 
 nav a{
 margin-left:20px;
 text-decoration:none;
 color:white;
+font-weight:500;
+transition:0.3s;
 }
+
+nav a:hover{
+color:#3b82f6;
+}
+
+/* ===================================================== */
+/* HERO SECTION (INTRODUCTION) */
+/* ===================================================== */
 
 .hero{
 height:90vh;
@@ -33,20 +52,43 @@ border-radius:8px;
 margin:10px;
 text-decoration:none;
 color:white;
+transition:0.3s;
 }
+
+.buttons a:hover{
+background:#2563eb;
+transform:translateY(-2px);
+}
+
+/* ===================================================== */
+/* GENERIC SECTIONS */
+/* ===================================================== */
 
 section{
 padding:100px 10%;
 }
+
+/* ===================================================== */
+/* VIDEO PRESENTATION */
+/* ===================================================== */
 
 video{
 width:600px;
 border-radius:10px;
 }
 
+/* ===================================================== */
+/* GLOBAL IMAGE STYLE */
+/* ===================================================== */
+
 img{
 border-radius:10px;
 }
+
+/* ===================================================== */
+/* SKILLS SECTION */
+/* Floating logos + animated background */
+/* ===================================================== */
 
 #skills{
 position:relative;
@@ -54,6 +96,8 @@ height:500px;
 overflow:hidden;
 text-align:center;
 }
+
+/* canvas utilisé pour animation JS */
 
 #skills-canvas{
 position:absolute;
@@ -63,6 +107,8 @@ top:0;
 left:0;
 z-index:-1;
 }
+
+/* logos technologies */
 
 .skills-logos{
 display:flex;
@@ -77,15 +123,23 @@ animation:float 6s infinite ease-in-out;
 transition:0.4s;
 }
 
+/* hover animation */
+
 .skills-logos img:hover{
 transform:scale(1.3);
 }
+
+/* floating animation */
 
 @keyframes float{
 0%{transform:translateY(0px);}
 50%{transform:translateY(-15px);}
 100%{transform:translateY(0px);}
 }
+
+/* ===================================================== */
+/* EXPERIENCE SECTION */
+/* ===================================================== */
 
 .timeline{
 margin-top:40px;
@@ -96,7 +150,51 @@ background:#1e293b;
 padding:25px;
 border-radius:10px;
 margin-bottom:20px;
+transition:0.3s;
 }
+
+.exp:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* ===================================================== */
+/* EDUCATION SECTION */
+/* ===================================================== */
+
+.education-timeline{
+max-width:900px;
+margin:auto;
+margin-top:40px;
+}
+
+.edu{
+background:#1e293b;
+padding:25px;
+border-radius:10px;
+margin-bottom:25px;
+transition:0.3s;
+}
+
+.edu:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+.edu-school{
+color:#3b82f6;
+font-weight:500;
+}
+
+.edu-date{
+color:#94a3b8;
+font-size:14px;
+margin-bottom:10px;
+}
+
+/* ===================================================== */
+/* PROJECTS GRID */
+/* ===================================================== */
 
 .project-grid{
 display:grid;
@@ -106,15 +204,43 @@ gap:30px;
 
 .project{
 background:#1e293b;
-padding:30px;
+padding:25px;
 border-radius:12px;
 transition:0.3s;
+}
+
+.project img{
+width:100%;
+border-radius:10px;
+margin-bottom:15px;
 }
 
 .project:hover{
 transform:translateY(-10px);
 box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
+
+/* bouton voir projet */
+
+.project-btn{
+display:inline-block;
+margin-top:10px;
+padding:10px 20px;
+background:#3b82f6;
+border-radius:8px;
+text-decoration:none;
+color:white;
+transition:0.3s;
+}
+
+.project-btn:hover{
+background:#2563eb;
+transform:translateY(-2px);
+}
+
+/* ===================================================== */
+/* TECHNOLOGY STACK ICONS */
+/* ===================================================== */
 
 .tech-stack{
 display:flex;
@@ -129,6 +255,10 @@ padding:4px;
 border-radius:5px;
 }
 
+/* ===================================================== */
+/* SCROLL FADE ANIMATION */
+/* ===================================================== */
+
 .fade{
 opacity:0;
 transform:translateY(40px);
@@ -140,135 +270,18 @@ opacity:1;
 transform:translateY(0);
 }
 
-.project-header{
+/* ===================================================== */
+/* PROJECT PAGE HEADER */
+/* ===================================================== */
 
+.project-header{
 padding:60px 10%;
 display:flex;
 justify-content:space-between;
 align-items:center;
-
 }
 
-.back-btn{
-
-color:#3b82f6;
-text-decoration:none;
-
-}
-
-.project-intro{
-
-max-width:900px;
-margin:auto;
-line-height:1.6;
-
-}
-
-.project-section{
-
-max-width:1000px;
-margin:auto;
-margin-top:60px;
-
-}
-
-.graph-card{
-
-background:#1e293b;
-padding:30px;
-border-radius:12px;
-margin-top:20px;
-
-}
-
-.graph-card img{
-
-width:100%;
-border-radius:10px;
-margin-bottom:20px;
-
-}
-
-.graph-desc{
-
-color:#cbd5e1;
-line-height:1.6;
-
-}
-
-.skills-learned{
-
-max-width:900px;
-margin:auto;
-margin-top:80px;
-
-}
-
-.skills-learned ul{
-
-line-height:2;
-
-}
-/* Ameliorer la lisibilité des paragraphes */
-.project-links{
-
-max-width:900px;
-margin:auto;
-margin-top:60px;
-
-}
-
-.project-intro p{
-
-font-size:18px;
-line-height:1.8;
-color:#d1d5db;
-margin-top:15px;
-
-}
-
-.graph-desc{
-
-font-size:17px;
-line-height:1.7;
-color:#d1d5db;
-
-}
-
-
-.tech-section{
-
-max-width:900px;
-margin:auto;
-margin-top:60px;
-
-}
-
-.tech-stack{
-
-display:flex;
-gap:15px;
-margin:20px 0;
-
-}
-
-.tech-stack img{
-
-width:50px;
-background:white;
-padding:8px;
-border-radius:10px;
-
-}
-
-.tech-list ul{
-
-margin-top:20px;
-line-height:2;
-color:#e2e8f0;
-
-}
-
+/* bouton retour */
 
 .btn-back{
 background:#2563eb;
@@ -284,6 +297,88 @@ transition:0.3s;
 background:#1d4ed8;
 transform:translateY(-2px);
 }
+
+/* ===================================================== */
+/* PROJECT PAGE CONTENT */
+/* ===================================================== */
+
+.project-intro{
+max-width:900px;
+margin:auto;
+line-height:1.6;
+}
+
+.project-intro p{
+font-size:18px;
+line-height:1.8;
+color:#d1d5db;
+margin-top:15px;
+}
+
+/* sections graphiques */
+
+.project-section{
+max-width:1000px;
+margin:auto;
+margin-top:60px;
+}
+
+/* card contenant graphique */
+
+.graph-card{
+background:#1e293b;
+padding:30px;
+border-radius:12px;
+margin-top:20px;
+}
+
+.graph-card img{
+width:100%;
+border-radius:10px;
+margin-bottom:20px;
+}
+
+.graph-desc{
+font-size:17px;
+line-height:1.7;
+color:#d1d5db;
+}
+
+/* ===================================================== */
+/* SKILLS DEVELOPED IN PROJECT */
+/* ===================================================== */
+
+.skills-learned{
+max-width:900px;
+margin:auto;
+margin-top:80px;
+}
+
+.skills-learned ul{
+line-height:2;
+}
+
+/* ===================================================== */
+/* RESULTS CARDS */
+/* ===================================================== */
+
+.results-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+margin-top:30px;
+}
+
+.result-card{
+background:#1e293b;
+padding:20px;
+border-radius:10px;
+text-align:center;
+}
+
+/* ===================================================== */
+/* RESOURCES SECTION */
+/* ===================================================== */
 
 .resources{
 text-align:center;
@@ -316,16 +411,24 @@ box-shadow:0 10px 20px rgba(0,0,0,0.3);
 background:#111827;
 }
 
-.results-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:20px;
-margin-top:30px;
+/* ===================================================== */
+/* GITHUB STATS SECTION */
+/* ===================================================== */
+
+.github{
+text-align:center;
+margin-top:80px;
 }
 
-.result-card{
-background:#1e293b;
-padding:20px;
+.github-stats{
+display:flex;
+justify-content:center;
+gap:30px;
+flex-wrap:wrap;
+margin-top:40px;
+}
+
+.github-stats img{
+width:420px;
 border-radius:10px;
-text-align:center;
 }
