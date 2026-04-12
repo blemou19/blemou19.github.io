@@ -1,355 +1,1226 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rémy Blemou — Data Analyst & Data Scientist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:       #080C14;
+  --bg2:      #0D1220;
+  --bg3:      #111827;
+  --navy:     #1B2D4F;
+  --blue:     #2563EB;
+  --blue-l:   #3B82F6;
+  --cyan:     #06B6D4;
+  --cyan-l:   #22D3EE;
+  --white:    #F1F5FE;
+  --gray:     #94A3B8;
+  --gray2:    #475569;
+  --border:   rgba(59,130,246,0.15);
+  --glow:     rgba(37,99,235,0.25);
+  --font-h:   'Syne', sans-serif;
+  --font-b:   'DM Sans', sans-serif;
+  --font-m:   'JetBrains Mono', monospace;
+}
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-<title>Rémy Blemou | Data Analyst</title>
+html { scroll-behavior: smooth; }
 
-<link rel="stylesheet" href="style.css">
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--font-b);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 2px; }
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: 0.4;
+}
 
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5vw;
+  height: 64px;
+  background: rgba(8,12,20,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: var(--font-h);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--white);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.nav-logo span { color: var(--cyan); }
+
+.nav-links {
+  display: flex; gap: 2rem; list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-m);
+  font-size: 0.75rem;
+  color: var(--gray);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--cyan); }
+
+.nav-cta {
+  font-family: var(--font-m);
+  font-size: 0.75rem;
+  color: var(--cyan);
+  text-decoration: none;
+  border: 1px solid var(--cyan);
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+.nav-cta:hover { background: var(--cyan); color: var(--bg); }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 80px 5vw 0;
+  position: relative;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-tag {
+  font-family: var(--font-m);
+  font-size: 0.75rem;
+  color: var(--cyan);
+  letter-spacing: 0.15em;
+  margin-bottom: 1.2rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.hero-tag::before {
+  content: '';
+  display: block; width: 32px; height: 1px;
+  background: var(--cyan);
+}
+
+.hero-name {
+  font-family: var(--font-h);
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+.hero-name .accent { color: var(--cyan); }
+
+.hero-title {
+  font-family: var(--font-h);
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-weight: 600;
+  color: var(--blue-l);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.hero-desc {
+  color: var(--gray);
+  font-size: 1rem;
+  font-weight: 300;
+  max-width: 480px;
+  margin-bottom: 2.5rem;
+  line-height: 1.8;
+}
+
+.hero-btns {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.btn-primary {
+  background: var(--blue);
+  color: #fff;
+  padding: 0.75rem 1.8rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-family: var(--font-b);
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  box-shadow: 0 0 24px var(--glow);
+}
+.btn-primary:hover { background: var(--blue-l); transform: translateY(-2px); box-shadow: 0 4px 32px var(--glow); }
+
+.btn-outline {
+  border: 1px solid var(--border);
+  color: var(--gray);
+  padding: 0.75rem 1.8rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-family: var(--font-b);
+  font-weight: 400;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.btn-outline:hover { border-color: var(--blue-l); color: var(--white); }
+
+.hero-stats {
+  display: flex; gap: 2.5rem;
+}
+.stat-num {
+  font-family: var(--font-h);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--white);
+  display: block;
+  line-height: 1;
+}
+.stat-num span { color: var(--cyan); }
+.stat-lbl {
+  font-size: 0.75rem;
+  color: var(--gray);
+  font-family: var(--font-m);
+  letter-spacing: 0.05em;
+}
+
+/* Hero visual */
+.hero-visual {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.hero-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  box-shadow: 0 0 60px rgba(6,182,212,0.08);
+}
+
+.hero-card::before {
+  content: '';
+  position: absolute; top: -1px; left: 24px; right: 24px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  border-radius: 2px;
+}
+
+.card-header {
+  display: flex; gap: 6px; margin-bottom: 1.2rem;
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-r { background: #FF5F57; }
+.dot-y { background: #FFBD2E; }
+.dot-g { background: #28CA42; }
+
+.code-line {
+  font-family: var(--font-m);
+  font-size: 0.78rem;
+  line-height: 1.9;
+  color: var(--gray2);
+}
+.code-line .kw  { color: #7C3AED; }
+.code-line .fn  { color: var(--blue-l); }
+.code-line .str { color: #10B981; }
+.code-line .cy  { color: var(--cyan); }
+.code-line .num { color: #F59E0B; }
+.code-line .cmt { color: var(--gray2); font-style: italic; }
+.code-cursor {
+  display: inline-block; width: 8px; height: 14px;
+  background: var(--cyan); vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ── SECTIONS COMMUNES ── */
+section {
+  padding: 6rem 5vw;
+  position: relative;
+}
+
+.section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-tag {
+  font-family: var(--font-m);
+  font-size: 0.7rem;
+  color: var(--cyan);
+  letter-spacing: 0.2em;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+
+.section-title {
+  font-family: var(--font-h);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.section-sub {
+  color: var(--gray);
+  font-weight: 300;
+  max-width: 560px;
+  margin-bottom: 3rem;
+}
+
+.divider {
+  width: 48px; height: 3px;
+  background: linear-gradient(90deg, var(--cyan), var(--blue));
+  border-radius: 2px;
+  margin-bottom: 1rem;
+}
+
+/* ── À PROPOS ── */
+#about { background: var(--bg2); }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.about-text p {
+  color: var(--gray);
+  font-weight: 300;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.about-text p strong { color: var(--white); font-weight: 500; }
+
+.about-highlight {
+  background: var(--bg3);
+  border-left: 3px solid var(--cyan);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.2rem;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  color: var(--gray);
+  font-style: italic;
+}
+
+.skills-grid {
+  display: flex; flex-direction: column; gap: 1rem;
+}
+
+.skill-row {
+  display: flex; flex-direction: column; gap: 0.3rem;
+}
+
+.skill-head {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-m);
+  font-size: 0.75rem;
+}
+.skill-name { color: var(--white); }
+.skill-pct  { color: var(--cyan); }
+
+.skill-bar {
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.skill-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  transform-origin: left;
+  animation: fillBar 1.2s ease forwards;
+  transform: scaleX(0);
+}
+
+@keyframes fillBar { to { transform: scaleX(1); } }
+
+/* ── EXPÉRIENCES ── */
+#experience { background: var(--bg); }
+
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+.timeline::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--cyan), transparent);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 3rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+}
+.timeline-item.visible { opacity: 1; transform: translateY(0); }
+
+.timeline-dot {
+  position: absolute; left: -2.4rem; top: 0.3rem;
+  width: 12px; height: 12px;
+  background: var(--bg);
+  border: 2px solid var(--cyan);
+  border-radius: 50%;
+}
+
+.timeline-dates {
+  font-family: var(--font-m);
+  font-size: 0.7rem;
+  color: var(--cyan);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+}
+
+.timeline-role {
+  font-family: var(--font-h);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.2rem;
+}
+
+.timeline-org {
+  font-size: 0.9rem;
+  color: var(--blue-l);
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+}
+
+.timeline-desc { color: var(--gray); font-size: 0.9rem; font-weight: 300; }
+.timeline-desc li { margin-bottom: 0.3rem; margin-left: 1rem; }
+
+.tags {
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+  margin-top: 0.8rem;
+}
+.tag {
+  font-family: var(--font-m);
+  font-size: 0.68rem;
+  color: var(--cyan);
+  border: 1px solid rgba(6,182,212,0.3);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  background: rgba(6,182,212,0.05);
+  letter-spacing: 0.03em;
+}
+
+/* ── PROJETS ── */
+#projects { background: var(--bg2); }
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.project-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.8rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(24px);
+}
+.project-card.visible { opacity: 1; transform: translateY(0); }
+
+.project-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at top left, rgba(6,182,212,0.04), transparent 60%);
+  pointer-events: none;
+}
+
+.project-card:hover {
+  border-color: rgba(6,182,212,0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 40px rgba(6,182,212,0.1);
+}
+
+.project-num {
+  font-family: var(--font-m);
+  font-size: 0.68rem;
+  color: var(--gray2);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.8rem;
+}
+
+.project-title {
+  font-family: var(--font-h);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.02em;
+}
+
+.project-category {
+  font-size: 0.78rem;
+  color: var(--cyan);
+  font-family: var(--font-m);
+  margin-bottom: 0.8rem;
+}
+
+.project-desc {
+  color: var(--gray);
+  font-size: 0.88rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.project-metric {
+  background: rgba(6,182,212,0.07);
+  border: 1px solid rgba(6,182,212,0.15);
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  font-family: var(--font-m);
+  font-size: 0.75rem;
+  color: var(--cyan-l);
+  margin-bottom: 1rem;
+}
+
+.project-footer {
+  display: flex; justify-content: space-between; align-items: center;
+}
+
+.project-link {
+  font-family: var(--font-m);
+  font-size: 0.72rem;
+  color: var(--blue-l);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  display: flex; align-items: center; gap: 0.3rem;
+  transition: color 0.2s;
+}
+.project-link:hover { color: var(--cyan); }
+.project-link::after { content: '→'; }
+
+/* ── COMPÉTENCES ── */
+#skills { background: var(--bg); }
+
+.skills-cats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.skill-cat {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: border-color 0.2s;
+}
+.skill-cat:hover { border-color: rgba(6,182,212,0.3); }
+
+.skill-cat-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.skill-cat-title {
+  font-family: var(--font-h);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.8rem;
+}
+
+.skill-list {
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+}
+
+.skill-pill {
+  font-family: var(--font-m);
+  font-size: 0.7rem;
+  color: var(--gray);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+}
+
+/* ── FORMATION ── */
+#education { background: var(--bg2); }
+
+.edu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.edu-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.8rem;
+  transition: border-color 0.2s;
+}
+.edu-card:hover { border-color: rgba(37,99,235,0.4); }
+
+.edu-year {
+  font-family: var(--font-m);
+  font-size: 0.7rem;
+  color: var(--blue-l);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.edu-degree {
+  font-family: var(--font-h);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.3rem;
+}
+
+.edu-school {
+  font-size: 0.88rem;
+  color: var(--gray);
+  margin-bottom: 0.8rem;
+}
+
+.edu-desc {
+  font-size: 0.82rem;
+  color: var(--gray2);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* ── GITHUB ── */
+#github { background: var(--bg); }
+
+.github-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.github-stats img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.repo-list { display: flex; flex-direction: column; gap: 0.8rem; }
+
+.repo-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.repo-card:hover { border-color: rgba(6,182,212,0.3); transform: translateX(4px); }
+
+.repo-name {
+  font-family: var(--font-m);
+  font-size: 0.82rem;
+  color: var(--blue-l);
+  margin-bottom: 0.3rem;
+}
+
+.repo-desc { font-size: 0.8rem; color: var(--gray); font-weight: 300; }
+
+/* ── CONTACT ── */
+#contact {
+  background: var(--bg2);
+  text-align: center;
+}
+
+.contact-inner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.contact-links {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.contact-link {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 0.8rem 1.4rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--gray);
+  font-size: 0.88rem;
+  transition: all 0.2s;
+}
+.contact-link:hover { border-color: var(--cyan); color: var(--white); }
+.contact-link .icon { font-size: 1.1rem; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  text-align: center;
+  padding: 2rem 5vw;
+  font-family: var(--font-m);
+  font-size: 0.72rem;
+  color: var(--gray2);
+  letter-spacing: 0.05em;
+}
+
+/* ── ANIMATIONS ── */
+.fade-in {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .hero-grid, .about-grid, .github-inner { grid-template-columns: 1fr; }
+  .hero-visual { display: none; }
+  .nav-links { display: none; }
+}
+</style>
 </head>
-
 <body>
 
-
-
-<!-- ================= HEADER ================= -->
-
-<header>
-
-<h1>Rémy Blemou</h1>
-
-<!-- bouton menu mobile -->
-<div class="menu-toggle" id="menu-toggle">
-☰
-</div>
-
-<nav id="nav-menu">
-
-<a href="#about">About</a>
-<a href="#skills">Skills</a>
-<a href="#experience">Experience</a>
-<a href="#education">Education</a>
-<a href="#projects">Projects</a>
-<a href="#github">GitHub</a>
-<a href="#contact">Contact</a>
-
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">RB<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#experience">Expériences</a></li>
+    <li><a href="#projects">Projets</a></li>
+    <li><a href="#skills">Compétences</a></li>
+    <li><a href="#education">Formation</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="assets/CV-BLEMOU-Remy-Alternance-Data.pdf" class="nav-cta" target="_blank">CV PDF</a>
 </nav>
 
-</header>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid">
+    <div class="hero-text">
+      <div class="hero-tag">Disponible · Alternance sept. 2026</div>
+      <h1 class="hero-name">Rémy<br><span class="accent">Blemou</span></h1>
+      <div class="hero-title">Data Analyst · Data Scientist · BI</div>
+      <p class="hero-desc">
+        Étudiant en Business Data Science à l'UCO Angers. Je transforme les données brutes en insights actionnables grâce à Python, SQL, Power BI et le Machine Learning.
+      </p>
+      <div class="hero-btns">
+        <a href="#projects" class="btn-primary">Voir mes projets</a>
+        <a href="#contact" class="btn-outline">Me contacter</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <span class="stat-num">4<span>+</span></span>
+          <span class="stat-lbl">expériences</span>
+        </div>
+        <div>
+          <span class="stat-num">4<span>+</span></span>
+          <span class="stat-lbl">projets data</span>
+        </div>
+        <div>
+          <span class="stat-num">88<span>%</span></span>
+          <span class="stat-lbl">précision ML</span>
+        </div>
+      </div>
+    </div>
 
-
-
-<!-- ================= HERO ================= -->
-
-<section class="hero">
-
-<h2>Data Analyst / Business Data Science</h2>
-
-<p>Python • SQL • Power BI • Machine Learning</p>
-
-<div class="buttons">
-
-<a href="https://github.com/blemou19" target="_blank">GitHub</a>
-
-<a href="https://www.linkedin.com/in/r%C3%A9my-blemou/" target="_blank">LinkedIn</a>
-
-<a href="assets/CV-BLEMOU-Remy-Alternance-Data.pdf" target="_blank">CV</a>
-
-</div>
-
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="card-header">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+        </div>
+        <div class="code-line"><span class="cmt"># analyse_churn.py</span></div>
+        <div class="code-line"><span class="kw">import</span> pandas <span class="kw">as</span> <span class="cy">pd</span></div>
+        <div class="code-line"><span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> <span class="fn">XGBClassifier</span></div>
+        <div class="code-line">&nbsp;</div>
+        <div class="code-line"><span class="cmt"># Chargement des données</span></div>
+        <div class="code-line">df = <span class="cy">pd</span>.<span class="fn">read_csv</span>(<span class="str">"clients.csv"</span>)</div>
+        <div class="code-line">&nbsp;</div>
+        <div class="code-line"><span class="cmt"># Modèle ML</span></div>
+        <div class="code-line">model = <span class="fn">XGBClassifier</span>(</div>
+        <div class="code-line">&nbsp;&nbsp;n_estimators=<span class="num">200</span>,</div>
+        <div class="code-line">&nbsp;&nbsp;max_depth=<span class="num">6</span></div>
+        <div class="code-line">)</div>
+        <div class="code-line">model.<span class="fn">fit</span>(X_train, y_train)</div>
+        <div class="code-line">&nbsp;</div>
+        <div class="code-line"><span class="cmt"># Précision : </span><span class="cy">88%</span> ✓ <span class="code-cursor"></span></div>
+      </div>
+    </div>
+  </div>
 </section>
 
-
-
-<!-- ================= VIDEO PRESENTATION ================= -->
-
-<section id="video" class="fade">
-
-<h2>Présentation</h2>
-
-<video controls>
-
-<source src="assets/video.mp4" type="video/mp4">
-
-</video>
-
+<!-- À PROPOS -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-tag">// à propos</div>
+    <h2 class="section-title">Qui suis-je ?</h2>
+    <div class="divider"></div>
+    <div class="about-grid">
+      <div class="about-text fade-in">
+        <p>Je suis <strong>Rémy Blemou</strong>, étudiant en Bachelor Business Data Science à l'UCO Angers (2024–2027), actuellement en recherche d'alternance à partir de <strong>septembre 2026</strong>.</p>
+        <p>Passionné par la donnée sous toutes ses formes — exploration, modélisation, visualisation — je m'épanouis à la croisée entre la <strong>Data Science</strong>, la <strong>Business Intelligence</strong> et l'<strong>ingénierie des données</strong>.</p>
+        <div class="about-highlight">
+          « Mon moteur : transformer une masse de données brutes en décisions claires et actionnables pour les organisations. »
+        </div>
+        <p>Fort de 4 expériences professionnelles (SDIS49, AEGA, UCO Angers, CNPSA Conakry), j'ai travaillé sur des pipelines ETL, des dashboards Power BI, du Machine Learning et de la modélisation PostgreSQL.</p>
+      </div>
+      <div class="skills-grid fade-in">
+        <div class="skill-row">
+          <div class="skill-head"><span class="skill-name">Python</span><span class="skill-pct">92%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-head"><span class="skill-name">SQL / PostgreSQL</span><span class="skill-pct">88%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-head"><span class="skill-name">Power BI / DAX</span><span class="skill-pct">85%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-head"><span class="skill-name">Machine Learning</span><span class="skill-pct">80%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-head"><span class="skill-name">R / SAS</span><span class="skill-pct">72%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:72%"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-head"><span class="skill-name">Apache Hop (ETL)</span><span class="skill-pct">75%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- EXPÉRIENCES -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-tag">// expériences</div>
+    <h2 class="section-title">Parcours professionnel</h2>
+    <div class="divider"></div>
+    <p class="section-sub">4 expériences dans des environnements data réels, de Conakry à Angers.</p>
 
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-dates">AVRIL 2026 – JUILLET 2026</div>
+        <div class="timeline-role">Data Engineer & Analyst</div>
+        <div class="timeline-org">SDIS49 — Projet NexSIS · Angers</div>
+        <ul class="timeline-desc">
+          <li>Pipeline ETL Apache Hop : extraction via API REST et intégration PostgreSQL</li>
+          <li>Conception d'une base de données décisionnelle PostgreSQL pour l'analyse opérationnelle</li>
+          <li>Développement de tableaux de bord DigDash pour le suivi en temps réel</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">Apache Hop</span>
+          <span class="tag">PostgreSQL</span><span class="tag">DigDash</span><span class="tag">API REST</span>
+        </div>
+      </div>
 
-<!-- ================= ABOUT ================= -->
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-dates">OCTOBRE 2025 – PRÉSENT</div>
+        <div class="timeline-role">Data Analyst (Bénévole)</div>
+        <div class="timeline-org">AEGA — Angers</div>
+        <ul class="timeline-desc">
+          <li>Gestion du cycle complet de la donnée : collecte → nettoyage → dashboards → diffusion</li>
+          <li>Développement et maintenance de dashboards Power BI pour le pilotage stratégique</li>
+          <li>Définition et suivi des KPIs, identification d'insights pour la direction</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">Power BI</span><span class="tag">DAX</span>
+          <span class="tag">Excel</span><span class="tag">KPI</span>
+        </div>
+      </div>
 
-<section id="about" class="fade">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-dates">MAI 2025 – JUILLET 2025</div>
+        <div class="timeline-role">Data Analyst</div>
+        <div class="timeline-org">Observatoire des données — UCO Angers</div>
+        <ul class="timeline-desc">
+          <li>Création de tableaux interactifs Power BI pour l'analyse de l'occupation des salles</li>
+          <li>Nettoyage et modélisation des données brutes issues du système d'information</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">Power BI</span><span class="tag">Excel</span><span class="tag">Data Cleaning</span>
+        </div>
+      </div>
 
-<h2>About Me</h2>
-
-<p>
-
-Étudiant en Business Data Science à l’UCO Angers.
-Passionné par la Data Science, la Business Intelligence et le Machine Learning.
-
-Je développe des solutions data-driven pour transformer les données en insights exploitables.
-
-</p>
-
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-dates">JUIN 2024 – AOÛT 2024</div>
+        <div class="timeline-role">Assistant Gestion des Données</div>
+        <div class="timeline-org">CNPSA — Conakry, Guinée</div>
+        <ul class="timeline-desc">
+          <li>Saisie et fiabilisation des bases Excel pour le calcul des pensions d'agents de l'État</li>
+          <li>Amélioration de la qualité des données : réduction significative des erreurs de saisie</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">Excel</span><span class="tag">Data Quality</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- PROJETS -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-tag">// projets</div>
+    <h2 class="section-title">Projets réalisés</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Des projets concrets avec des résultats mesurables.</p>
 
+    <div class="projects-grid">
 
-<!-- ================= SKILLS ================= -->
+      <div class="project-card">
+        <div class="project-num">01 · Machine Learning</div>
+        <div class="project-title">Prédiction du Churn Client</div>
+        <div class="project-category">Python · Scikit-learn · XGBoost · Pandas</div>
+        <p class="project-desc">Modèle de Machine Learning pour anticiper le départ des clients et permettre des actions de rétention ciblées.</p>
+        <div class="project-metric">✦ Précision : 88% — Réduction simulée du churn de 36,5%</div>
+        <div class="tags">
+          <span class="tag">Classification</span><span class="tag">XGBoost</span>
+          <span class="tag">Feature Engineering</span><span class="tag">Scikit-learn</span>
+        </div>
+        <br/>
+        <div class="project-footer">
+          <a href="Projects/churn.html" class="project-link">Voir le projet</a>
+          <div class="tags"><span class="tag">2025</span></div>
+        </div>
+      </div>
 
+      <div class="project-card">
+        <div class="project-num">02 · Business Intelligence</div>
+        <div class="project-title">Analyse Marché Immobilier</div>
+        <div class="project-category">R · Power BI · DAX · Excel</div>
+        <p class="project-desc">Analyse exploratoire de 20 000+ transactions immobilières pour identifier les tendances de prix et la segmentation géographique.</p>
+        <div class="project-metric">✦ 20 000+ transactions · Segmentation géographique interactive</div>
+        <div class="tags">
+          <span class="tag">Power BI</span><span class="tag">R</span>
+          <span class="tag">ggplot2</span><span class="tag">DAX</span>
+        </div>
+        <br/>
+        <div class="project-footer">
+          <a href="Projects/immobilier.html" class="project-link">Voir le projet</a>
+          <div class="tags"><span class="tag">2025</span></div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-num">03 · IA & Application</div>
+        <div class="project-title">Estimation Prix Véhicules</div>
+        <div class="project-category">Python · Random Forest · FastAPI · Google Cloud</div>
+        <p class="project-desc">Application marketing avec modèle de prédiction intégré pour estimer les prix de reprise de véhicules d'occasion.</p>
+        <div class="project-metric">✦ Modèle Random Forest déployé via FastAPI sur VM Google Cloud</div>
+        <div class="tags">
+          <span class="tag">Random Forest</span><span class="tag">FastAPI</span>
+          <span class="tag">Google Cloud</span><span class="tag">Python</span>
+        </div>
+        <br/>
+        <div class="project-footer">
+          <a href="https://github.com/blemou19/vehicle-price-prediction" class="project-link" target="_blank">Voir sur GitHub</a>
+          <div class="tags"><span class="tag">2025</span></div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-num">04 · Data Engineering</div>
+        <div class="project-title">Historisation des Offres SQL</div>
+        <div class="project-category">PostgreSQL · SQL · Modélisation</div>
+        <p class="project-desc">Conception d'une base de données de ventes avec automatisation des imports et log journalier pour le suivi et l'analyse historique.</p>
+        <div class="project-metric">✦ Automatisation complète des imports journaliers</div>
+        <div class="tags">
+          <span class="tag">PostgreSQL</span><span class="tag">SQL avancé</span>
+          <span class="tag">Modélisation</span>
+        </div>
+        <br/>
+        <div class="project-footer">
+          <a href="https://github.com/blemou19/sql-integration-historisation-offres" class="project-link" target="_blank">Voir sur GitHub</a>
+          <div class="tags"><span class="tag">2024</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMPÉTENCES -->
 <section id="skills">
+  <div class="section-inner">
+    <div class="section-tag">// compétences</div>
+    <h2 class="section-title">Stack technique</h2>
+    <div class="divider"></div>
 
-<h2>Tech Stack</h2>
-
-<div id="skills-canvas"></div>
-
-<div class="skills-logos">
-
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg">
-
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg">
-
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg">
-
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg">
-
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg">
-
-<img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/New_Power_BI_Logo.svg">
-
-<img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Microsoft_Excel_2013-2019_logo.svg">
-
-<img src="https://avatars.githubusercontent.com/u/100799150?s=200&v=4">
-
-</div>
-
+    <div class="skills-cats">
+      <div class="skill-cat fade-in">
+        <div class="skill-cat-icon">📊</div>
+        <div class="skill-cat-title">Data & BI</div>
+        <div class="skill-list">
+          <span class="skill-pill">Power BI</span>
+          <span class="skill-pill">DAX</span>
+          <span class="skill-pill">Power Query</span>
+          <span class="skill-pill">Excel</span>
+          <span class="skill-pill">Tableau</span>
+          <span class="skill-pill">DigDash</span>
+        </div>
+      </div>
+      <div class="skill-cat fade-in">
+        <div class="skill-cat-icon">🐍</div>
+        <div class="skill-cat-title">Programmation</div>
+        <div class="skill-list">
+          <span class="skill-pill">Python</span>
+          <span class="skill-pill">Pandas</span>
+          <span class="skill-pill">NumPy</span>
+          <span class="skill-pill">Matplotlib</span>
+          <span class="skill-pill">R</span>
+          <span class="skill-pill">SAS</span>
+        </div>
+      </div>
+      <div class="skill-cat fade-in">
+        <div class="skill-cat-icon">🗄️</div>
+        <div class="skill-cat-title">Bases de données</div>
+        <div class="skill-list">
+          <span class="skill-pill">PostgreSQL</span>
+          <span class="skill-pill">MySQL</span>
+          <span class="skill-pill">SQL avancé</span>
+          <span class="skill-pill">Modélisation</span>
+        </div>
+      </div>
+      <div class="skill-cat fade-in">
+        <div class="skill-cat-icon">🤖</div>
+        <div class="skill-cat-title">Machine Learning</div>
+        <div class="skill-list">
+          <span class="skill-pill">Scikit-learn</span>
+          <span class="skill-pill">XGBoost</span>
+          <span class="skill-pill">Random Forest</span>
+          <span class="skill-pill">Classification</span>
+          <span class="skill-pill">Régression</span>
+          <span class="skill-pill">Clustering</span>
+        </div>
+      </div>
+      <div class="skill-cat fade-in">
+        <div class="skill-cat-icon">⚙️</div>
+        <div class="skill-cat-title">Data Engineering</div>
+        <div class="skill-list">
+          <span class="skill-pill">Apache Hop</span>
+          <span class="skill-pill">ETL</span>
+          <span class="skill-pill">API REST</span>
+          <span class="skill-pill">FastAPI</span>
+          <span class="skill-pill">Git</span>
+          <span class="skill-pill">Linux</span>
+        </div>
+      </div>
+      <div class="skill-cat fade-in">
+        <div class="skill-cat-icon">🧠</div>
+        <div class="skill-cat-title">Soft Skills</div>
+        <div class="skill-list">
+          <span class="skill-pill">Rigueur analytique</span>
+          <span class="skill-pill">Autonomie</span>
+          <span class="skill-pill">Communication</span>
+          <span class="skill-pill">Esprit d'équipe</span>
+          <span class="skill-pill">Adaptabilité</span>
+          <span class="skill-pill">Curiosité</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- FORMATION -->
+<section id="education">
+  <div class="section-inner">
+    <div class="section-tag">// formation</div>
+    <h2 class="section-title">Parcours académique</h2>
+    <div class="divider"></div>
 
-
-<!-- ================= EXPERIENCE ================= -->
-
-<section id="experience" class="fade">
-
-<h2>Experience</h2>
-
-<div class="timeline">
-
-<div class="exp">
-
-<h3>Data Engineer & Analyst – SDIS49</h3>
-
-<p>
-Extraction de données via API, ETL Apache Hop et structuration PostgreSQL.
-</p>
-
-</div>
-
-<div class="exp">
-
-<h3>Data Analyst – AEGA</h3>
-
-<p>
-Développement de dashboards Power BI et analyse de données.
-</p>
-
-</div>
-
-<div class="exp">
-
-<h3>Data Analyst – Observatoire UCO</h3>
-
-<p>
-Création de tableaux interactifs pour analyser l’occupation des salles.
-</p>
-
-</div>
-
-</div>
-
+    <div class="edu-grid">
+      <div class="edu-card fade-in">
+        <div class="edu-year">2024 – 2027</div>
+        <div class="edu-degree">Bachelor Business Data Science</div>
+        <div class="edu-school">UCO Angers · France</div>
+        <p class="edu-desc">Data Science · Machine Learning · BI · Statistiques · Python · SQL · Power BI</p>
+      </div>
+      <div class="edu-card fade-in">
+        <div class="edu-year">2023 – 2024</div>
+        <div class="edu-degree">Licence 1 — Développement Logiciel</div>
+        <div class="edu-school">Université Gamal Abdel Nasser · Conakry</div>
+        <p class="edu-desc">Algorithmique, programmation, développement logiciel, systèmes informatiques.</p>
+      </div>
+      <div class="edu-card fade-in">
+        <div class="edu-year">2023</div>
+        <div class="edu-degree">Baccalauréat Sciences Expérimentales</div>
+        <div class="edu-school">Lycée Sainte Marie · Conakry · Mention Bien</div>
+        <p class="edu-desc">Mathématiques, sciences expérimentales, raisonnement analytique.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-
-
-<!-- ================= EDUCATION ================= -->
-<!-- ================= EDUCATION ================= -->
-
-<section id="education" class="fade">
-
-<h2>Education</h2>
-
-<div class="education-timeline">
-
-
-<!-- Bachelor actuel -->
-
-<div class="edu">
-
-<h3>Bachelor Business Data Science</h3>
-
-<p class="edu-school">UCO Angers</p>
-
-<p class="edu-date">2024 – 2027</p>
-
-<p>
-
-Formation spécialisée en Data Science, analyse de données et Business Intelligence.
-Apprentissage des méthodes de machine learning, de l'analyse statistique et de la visualisation de données avec Python, SQL et Power BI.
-
-</p>
-
-</div>
-
-
-<!-- Licence développement logiciel -->
-
-<div class="edu">
-
-<h3>Licence 1 Développement Logiciel</h3>
-
-<p class="edu-school">Université Gamal Abdel Nasser de Conakry</p>
-
-<p class="edu-date">2023 – 2024</p>
-
-<p>
-
-Formation orientée programmation et développement logiciel.
-Bases solides en algorithmique, programmation et systèmes informatiques.
-
-</p>
-
-</div>
-
-
-<!-- Bac -->
-
-<div class="edu">
-
-<h3>Baccalauréat Sciences Expérimentales — Mention Bien</h3>
-
-<p class="edu-school">Lycée Sainte Marie de Conakry</p>
-
-<p class="edu-date">2023</p>
-
-<p>
-
-Formation scientifique avec spécialisation en mathématiques, sciences expérimentales et raisonnement analytique.
-
-</p>
-
-</div>
-
-
-</div>
-
-</section>
-
-
-<!-- ================= PROJECTS ================= -->
-
-<section id="projects" class="fade">
-
-<h2>Projects</h2>
-
-<div class="project-grid">
-
-<div class="project">
-
-<img src="assets/asset_churn/fig_01_taux_churn_par_periode.png">
-
-<h3>Customer Churn Prediction</h3>
-
-<p>Machine learning pour anticiper le départ client.</p>
-
-<div class="tech-stack">
-
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg">
-
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg">
-
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg">
-
-<img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg">
-
-</div>
-
-<a class="project-btn" href="Projects/churn.html">Voir détails</a>
-
-</div>
-
-
-
-<div class="project">
-
-<img src="assets/immobilier/dashboard1.png">
-
-<h3>Real Estate Data Analysis</h3>
-
-<p>Analyse de 20 000 transactions immobilières.</p>
-
-<div class="tech-stack">
-
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg">
-
-<img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/New_Power_BI_Logo.svg">
-
-<img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Microsoft_Excel_2013-2019_logo.svg">
-
-</div>
-
-<a class="project-btn" href="Projects/immobilier.html">Voir détails</a>
-
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- ================= GITHUB STATS ================= -->
-
+<!-- GITHUB -->
 <section id="github">
+  <div class="section-inner">
+    <div class="section-tag">// activité github</div>
+    <h2 class="section-title">GitHub</h2>
+    <div class="divider"></div>
 
-<h2>GitHub Activity</h2>
-
-<div class="github-stats">
-
-<img src="https://github-readme-stats.vercel.app/api?username=blemou19&show_icons=true&theme=tokyonight">
-
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=blemou19&layout=compact&theme=tokyonight">
-
-</div>
-
+    <div class="github-inner">
+      <div class="github-stats fade-in">
+        <img src="https://github-readme-stats.vercel.app/api?username=blemou19&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0D1220&title_color=06B6D4&icon_color=3B82F6" alt="GitHub Stats"/>
+        <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=blemou19&layout=compact&theme=tokyonight&hide_border=true&bg_color=0D1220&title_color=06B6D4" alt="Top Languages"/>
+      </div>
+      <div class="fade-in">
+        <p class="section-sub" style="margin-bottom:1.5rem">Mes repositories principaux :</p>
+        <div class="repo-list">
+          <a href="https://github.com/blemou19/blemou19.github.io" class="repo-card" target="_blank">
+            <div class="repo-name">📁 blemou19.github.io</div>
+            <div class="repo-desc">Portfolio personnel — HTML, CSS, JavaScript</div>
+          </a>
+          <a href="https://github.com/blemou19/churn-prediction-project" class="repo-card" target="_blank">
+            <div class="repo-name">📁 churn-prediction-project</div>
+            <div class="repo-desc">Prédiction du churn client avec XGBoost — Python, ML</div>
+          </a>
+          <a href="https://github.com/blemou19/powerbi-immobilier" class="repo-card" target="_blank">
+            <div class="repo-name">📁 powerbi-immobilier</div>
+            <div class="repo-desc">Analyse immobilière — R, Power BI, DAX</div>
+          </a>
+          <a href="https://github.com/blemou19/vehicle-price-prediction" class="repo-card" target="_blank">
+            <div class="repo-name">📁 vehicle-price-prediction</div>
+            <div class="repo-desc">Estimation de prix de véhicules — Python, FastAPI</div>
+          </a>
+          <a href="https://github.com/blemou19/sql-integration-historisation-offres" class="repo-card" target="_blank">
+            <div class="repo-name">📁 sql-integration-historisation-offres</div>
+            <div class="repo-desc">Historisation des offres — PostgreSQL, SQL</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-
-
-<!-- ================= CONTACT ================= -->
-
+<!-- CONTACT -->
 <section id="contact">
-
-<h2>Contact</h2>
-
-<p>Email : remyblemou@gmail.com</p>
-
-<p>Phone : +33 7 44 19 20 80</p>
-
+  <div class="section-inner">
+    <div class="contact-inner">
+      <div class="section-tag" style="text-align:center;display:block">// contact</div>
+      <h2 class="section-title">Travaillons ensemble</h2>
+      <div class="divider" style="margin:0.5rem auto 1rem"></div>
+      <p class="section-sub" style="margin:0 auto 0">
+        Je recherche une alternance à partir de <strong>septembre 2026</strong> en Data Analyse, Data Science ou Business Intelligence. N'hésitez pas à me contacter !
+      </p>
+      <div class="contact-links">
+        <a href="/cdn-cgi/l/email-protection#790b1c14001b151c14160c391e14181015571a1614" class="contact-link">
+          <span class="icon">✉️</span> <span class="__cf_email__" data-cfemail="1a687f776378767f77756f5a7d777b737634797577">[email&#160;protected]</span>
+        </a>
+        <a href="tel:+33744192080" class="contact-link">
+          <span class="icon">📞</span> +33 7 44 19 20 80
+        </a>
+        <a href="https://github.com/blemou19" class="contact-link" target="_blank">
+          <span class="icon">🐙</span> github.com/blemou19
+        </a>
+        <a href="https://www.linkedin.com/in/rémy-bakary-blemou/" class="contact-link" target="_blank">
+          <span class="icon">💼</span> LinkedIn
+        </a>
+        <a href="assets/CV-BLEMOU-Remy-Alternance-Data.pdf" class="contact-link" target="_blank">
+          <span class="icon">📄</span> Télécharger mon CV
+        </a>
+      </div>
+    </div>
+  </div>
 </section>
 
+<footer>
+  &copy; 2026 · Rémy Blemou · Data Analyst &amp; Data Scientist · Angers, France
+</footer>
 
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Intersection Observer pour animations au scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+      }, i * 80);
+    }
+  });
+}, { threshold: 0.1 });
 
-<script src="script.js"></script>
+document.querySelectorAll('.fade-in, .timeline-item, .project-card').forEach(el => {
+  observer.observe(el);
+});
 
-</body>
+// Skill bars animate on scroll
+const skillObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.skill-fill').forEach(bar => {
+        bar.style.animationPlayState = 'running';
+      });
+    }
+  });
+}, { threshold: 0.3 });
 
-</html>
+document.querySelectorAll('.skills-grid').forEach(el => {
+  el.querySelectorAll('.skill-fill').forEach(bar => {
+    bar.style.animationPlayState = 'paused';
+  });
+  skillObserver.observe(el);
+});
+
+// Active nav link
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    if (w
