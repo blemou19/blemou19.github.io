@@ -1,270 +1,620 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rémy Blemou — Data Analyst & Data Scientist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<style>
+:root {
+  --bg:#0f172a; --bg2:#111827; --bg3:#1e293b;
+  --blue:#2563eb; --blue-l:#3b82f6;
+  --cyan:#06b6d4; --cyan-l:#22d3ee;
+  --white:#f1f5fe; --gray:#94a3b8; --gray2:#475569;
+  --border:rgba(59,130,246,0.15); --glow:rgba(37,99,235,0.3);
+  --fh:'Syne',sans-serif; --fb:'DM Sans',sans-serif; --fm:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:var(--fb);overflow-x:hidden;line-height:1.7}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px}
 
-<meta charset="UTF-8">
-<title>Customer Churn Prediction</title>
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 8%;height:64px;background:rgba(15,23,42,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--fh);font-size:1.2rem;font-weight:800;color:var(--white);text-decoration:none;letter-spacing:-0.03em}
+.nav-logo span{color:var(--cyan)}
+.nav-links{display:flex;gap:1.8rem;list-style:none}
+.nav-links a{font-family:var(--fm);font-size:0.72rem;color:var(--gray);text-decoration:none;letter-spacing:0.06em;transition:color 0.2s}
+.nav-links a:hover,.nav-links a.active{color:var(--cyan)}
+.nav-cta{font-family:var(--fm);font-size:0.72rem;color:var(--cyan);text-decoration:none;border:1px solid var(--cyan);padding:0.4rem 1.1rem;border-radius:4px;transition:all 0.2s}
+.nav-cta:hover{background:var(--cyan);color:var(--bg)}
 
-<link rel="stylesheet" href="../style.css">
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 8% 0;position:relative;overflow:hidden}
+#hero-canvas{position:absolute;inset:0;z-index:0;opacity:0.4;pointer-events:none}
+.hero-content{position:relative;z-index:1}
+.hero-tag{font-family:var(--fm);font-size:0.72rem;color:var(--cyan);letter-spacing:0.18em;margin-bottom:1.2rem;display:flex;align-items:center;gap:0.6rem}
+.hero-tag::before{content:'';display:block;width:36px;height:1px;background:var(--cyan)}
+.hero-name{font-family:var(--fh);font-size:clamp(3rem,6vw,5.5rem);font-weight:800;line-height:1.0;letter-spacing:-0.04em;margin-bottom:0.4rem}
+.hero-name .accent{color:var(--cyan)}
+.hero-title{font-family:var(--fh);font-size:clamp(1rem,2vw,1.3rem);font-weight:600;color:var(--blue-l);margin-bottom:1.6rem}
+.hero-desc{color:var(--gray);font-size:1rem;font-weight:300;max-width:520px;margin-bottom:2.5rem;line-height:1.85}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{background:var(--blue);color:#fff;padding:0.78rem 2rem;border-radius:6px;text-decoration:none;font-weight:500;font-size:0.92rem;transition:all 0.2s;box-shadow:0 0 28px var(--glow)}
+.btn-primary:hover{background:var(--blue-l);transform:translateY(-2px)}
+.btn-outline{border:1px solid var(--border);color:var(--gray);padding:0.78rem 2rem;border-radius:6px;text-decoration:none;font-size:0.92rem;transition:all 0.2s}
+.btn-outline:hover{border-color:var(--blue-l);color:var(--white)}
+.scroll-hint{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.3rem;font-family:var(--fm);font-size:0.65rem;color:var(--gray2);letter-spacing:0.1em;z-index:1;animation:bounce 2s infinite}
+.scroll-hint::after{content:'↓';font-size:1rem;color:var(--cyan)}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
 
+/* SECTIONS */
+section{padding:6rem 8%;position:relative}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-tag{font-family:var(--fm);font-size:0.68rem;color:var(--cyan);letter-spacing:0.2em;margin-bottom:0.5rem;text-transform:uppercase}
+.section-title{font-family:var(--fh);font-size:clamp(1.8rem,3vw,2.6rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:0.4rem}
+.divider{width:48px;height:3px;background:linear-gradient(90deg,var(--cyan),var(--blue));border-radius:2px;margin-bottom:1rem}
+.section-sub{color:var(--gray);font-weight:300;max-width:580px;margin-bottom:3rem}
+.fade{opacity:1;transform:translateY(0);transition:opacity 0.6s ease,transform 0.6s ease}
+.fade.animate{opacity:0;transform:translateY(30px)}
+.fade.animate.show{opacity:1;transform:translateY(0)}
+
+/* ABOUT */
+#about{background:var(--bg2)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+.about-text p{color:var(--gray);font-weight:300;margin-bottom:1rem;line-height:1.85}
+.about-text strong{color:var(--white);font-weight:500}
+.about-quote{background:var(--bg3);border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;padding:1rem 1.3rem;margin:1.5rem 0;color:var(--gray);font-style:italic;font-size:0.95rem}
+.tech-logos{display:flex;flex-wrap:wrap;gap:1.3rem;align-items:center;justify-content:center;padding:2rem;background:var(--bg3);border:1px solid var(--border);border-radius:16px}
+.tech-logos img{width:54px;height:54px;object-fit:contain;border-radius:8px;background:#fff;padding:6px;transition:0.3s;animation:float 6s infinite ease-in-out}
+.tech-logos img:nth-child(2){animation-delay:.6s}
+.tech-logos img:nth-child(3){animation-delay:1.2s}
+.tech-logos img:nth-child(4){animation-delay:1.8s}
+.tech-logos img:nth-child(5){animation-delay:2.4s}
+.tech-logos img:nth-child(6){animation-delay:3s}
+.tech-logos img:nth-child(7){animation-delay:3.6s}
+.tech-logos img:nth-child(8){animation-delay:4.2s}
+.tech-logos img:hover{transform:scale(1.28) translateY(-5px);box-shadow:0 8px 24px rgba(6,182,212,0.35)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+/* EXPERIENCE */
+#experience{background:var(--bg)}
+.timeline{position:relative;padding-left:1.8rem;margin-top:0.5rem}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--cyan),transparent)}
+.tl-item{position:relative;margin-bottom:2.8rem}
+.tl-dot{position:absolute;left:-2.3rem;top:0.3rem;width:11px;height:11px;background:var(--bg);border:2px solid var(--cyan);border-radius:50%}
+.tl-dates{font-family:var(--fm);font-size:0.68rem;color:var(--cyan);letter-spacing:0.1em;margin-bottom:0.3rem}
+.tl-role{font-family:var(--fh);font-size:1.05rem;font-weight:700;color:var(--white);margin-bottom:0.15rem}
+.tl-org{font-size:0.88rem;color:var(--blue-l);font-weight:500;margin-bottom:0.7rem}
+.tl-desc{color:var(--gray);font-size:0.88rem;font-weight:300}
+.tl-desc li{margin-bottom:0.25rem;margin-left:1rem;line-height:1.65}
+.tags{display:flex;flex-wrap:wrap;gap:0.35rem;margin-top:0.75rem}
+.tag{font-family:var(--fm);font-size:0.65rem;color:var(--cyan);border:1px solid rgba(6,182,212,0.25);padding:0.18rem 0.55rem;border-radius:3px;background:rgba(6,182,212,0.05)}
+
+/* PROJETS */
+#projects{background:var(--bg2)}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.4rem}
+.project-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all 0.3s;position:relative}
+.project-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(6,182,212,0.05),transparent 60%);pointer-events:none;z-index:0}
+.project-card:hover{border-color:rgba(6,182,212,0.4);transform:translateY(-6px);box-shadow:0 12px 40px rgba(6,182,212,0.12)}
+.project-img{width:100%;height:180px;object-fit:cover;display:block;transition:0.3s}
+.project-card:hover .project-img{opacity:0.85}
+.project-img-placeholder{width:100%;height:180px;background:linear-gradient(135deg,#1B2D4F,var(--bg3));display:flex;align-items:center;justify-content:center;font-size:3.5rem}
+.project-body{padding:1.5rem;position:relative;z-index:1}
+.project-num{font-family:var(--fm);font-size:0.65rem;color:var(--gray2);letter-spacing:0.1em;margin-bottom:0.6rem}
+.project-title{font-family:var(--fh);font-size:1.05rem;font-weight:700;color:var(--white);margin-bottom:0.2rem;letter-spacing:-0.02em}
+.project-cat{font-family:var(--fm);font-size:0.7rem;color:var(--cyan);margin-bottom:0.7rem}
+.project-desc{color:var(--gray);font-size:0.85rem;font-weight:300;margin-bottom:0.9rem;line-height:1.7}
+.project-metric{background:rgba(6,182,212,0.07);border:1px solid rgba(6,182,212,0.15);border-radius:6px;padding:0.45rem 0.8rem;font-family:var(--fm);font-size:0.7rem;color:var(--cyan-l);margin-bottom:0.9rem}
+.project-footer{display:flex;justify-content:space-between;align-items:center;margin-top:0.5rem}
+.project-link{font-family:var(--fm);font-size:0.7rem;color:var(--blue-l);text-decoration:none;letter-spacing:0.05em;display:flex;align-items:center;gap:0.3rem;transition:color 0.2s}
+.project-link::after{content:'→'}
+.project-link:hover{color:var(--cyan)}
+
+/* COMPÉTENCES */
+#skills{background:var(--bg)}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.2rem}
+.skill-cat{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.4rem;transition:border-color 0.2s}
+.skill-cat:hover{border-color:rgba(6,182,212,0.3)}
+.skill-cat-icon{font-size:1.7rem;margin-bottom:0.7rem}
+.skill-cat-title{font-family:var(--fh);font-size:0.92rem;font-weight:700;color:var(--white);margin-bottom:0.7rem}
+.skill-pills{display:flex;flex-wrap:wrap;gap:0.35rem}
+.pill{font-family:var(--fm);font-size:0.68rem;color:var(--gray);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);padding:0.22rem 0.55rem;border-radius:4px}
+
+/* FORMATION */
+#education{background:var(--bg2)}
+.edu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.4rem}
+.edu-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.7rem;transition:all 0.3s}
+.edu-card:hover{border-color:rgba(37,99,235,0.4);transform:translateY(-4px)}
+.edu-year{font-family:var(--fm);font-size:0.68rem;color:var(--blue-l);letter-spacing:0.1em;margin-bottom:0.4rem}
+.edu-degree{font-family:var(--fh);font-size:1rem;font-weight:700;color:var(--white);margin-bottom:0.25rem}
+.edu-school{font-size:0.85rem;color:var(--gray);margin-bottom:0.7rem}
+.edu-desc{font-size:0.8rem;color:var(--gray2);font-weight:300;line-height:1.6}
+
+/* GITHUB */
+#github{background:var(--bg)}
+.github-inner{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start}
+.github-imgs{display:flex;flex-direction:column;gap:1rem}
+.github-imgs img{width:100%;border-radius:8px}
+.repo-list{display:flex;flex-direction:column;gap:0.75rem}
+.repo-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0.9rem 1.1rem;text-decoration:none;transition:all 0.2s;display:block}
+.repo-card:hover{border-color:rgba(6,182,212,0.3);transform:translateX(5px)}
+.repo-name{font-family:var(--fm);font-size:0.78rem;color:var(--blue-l);margin-bottom:0.25rem}
+.repo-desc{font-size:0.78rem;color:var(--gray);font-weight:300}
+
+/* CONTACT */
+#contact{background:var(--bg2);text-align:center}
+.contact-inner{max-width:600px;margin:0 auto}
+.contact-links{display:flex;justify-content:center;flex-wrap:wrap;gap:0.9rem;margin-top:2.5rem}
+.contact-link{display:flex;align-items:center;gap:0.5rem;background:var(--bg3);border:1px solid var(--border);padding:0.75rem 1.3rem;border-radius:8px;text-decoration:none;color:var(--gray);font-size:0.85rem;transition:all 0.2s}
+.contact-link:hover{border-color:var(--cyan);color:var(--white);transform:translateY(-2px)}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);text-align:center;padding:2rem 8%;font-family:var(--fm);font-size:0.7rem;color:var(--gray2);letter-spacing:0.05em}
+
+/* BURGER MENU MOBILE */
+.burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.burger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all 0.3s}
+.burger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+/* CODE CARD */
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;width:100%;max-width:1200px;position:relative;z-index:1}
+.hero-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.6rem;position:relative;box-shadow:0 0 50px rgba(6,182,212,0.06)}
+.hero-card::before{content:'';position:absolute;top:-1px;left:24px;right:24px;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);border-radius:2px}
+.card-dots{display:flex;gap:6px;margin-bottom:1.2rem}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#FF5F57}.dot-y{background:#FFBD2E}.dot-g{background:#28CA42}
+.code-line{font-family:var(--fm);font-size:0.76rem;line-height:1.95;color:var(--gray2)}
+.kw{color:#7C3AED}.fn{color:var(--blue-l)}.str{color:#10B981}.cy{color:var(--cyan)}.num{color:#F59E0B}.cmt{color:var(--gray2);font-style:italic}
+.code-cursor{display:inline-block;width:7px;height:13px;background:var(--cyan);vertical-align:middle;animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .about-grid,.github-inner{grid-template-columns:1fr;gap:2.5rem}
+  .hero-card-wrap{display:none}
+  section{padding:4rem 6%}
+  .burger{display:flex}
+  .nav-cta{display:none}
+  .nav-links{
+    display:flex;flex-direction:column;gap:0;
+    position:fixed;top:64px;left:0;right:0;
+    background:rgba(15,23,42,0.98);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+    padding:0;
+    max-height:0;overflow:hidden;
+    transition:max-height 0.35s ease, padding 0.35s ease;
+  }
+  .nav-links.open{max-height:400px;padding:1rem 0}
+  .nav-links li{border-bottom:1px solid var(--border)}
+  .nav-links a{display:block;padding:0.9rem 8%;font-size:0.85rem;letter-spacing:0.04em}
+}
+
+/* VIDEO SECTION */
+#video { background: var(--bg); }
+.video-inner { max-width: 860px; margin: 0 auto; text-align: center; }
+.video-wrap {
+  position: relative; margin-top: 2rem;
+  border-radius: 16px; overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 60px rgba(6,182,212,0.08);
+  background: var(--bg3);
+}
+.video-wrap::before {
+  content: '';
+  position: absolute; top: -1px; left: 48px; right: 48px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  z-index: 1;
+}
+.video-wrap video {
+  width: 100%; display: block; border-radius: 16px;
+  max-height: 480px; object-fit: cover;
+}
+.video-placeholder {
+  width: 100%; aspect-ratio: 16/9;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1.2rem;
+  background: linear-gradient(135deg, var(--bg3), var(--navy));
+  border-radius: 16px; cursor: pointer;
+  transition: all 0.3s;
+  min-height: 320px;
+}
+.video-placeholder:hover { box-shadow: 0 0 40px rgba(6,182,212,0.15); }
+.play-btn {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: rgba(6,182,212,0.15);
+  border: 2px solid var(--cyan);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem;
+  transition: all 0.3s;
+}
+.video-placeholder:hover .play-btn {
+  background: rgba(6,182,212,0.25);
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(6,182,212,0.3);
+}
+.video-placeholder-text {
+  font-family: var(--fm); font-size: 0.8rem;
+  color: var(--gray); letter-spacing: 0.08em;
+}
+.video-placeholder-text strong { color: var(--cyan); display: block; font-size: 1rem; margin-bottom: 0.3rem; }
+</style>
 </head>
-
 <body>
 
-<header class="project-header">
+<nav>
+  <a href="#hero" class="nav-logo">RB<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#video">Présentation</a></li>
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#experience">Expériences</a></li>
+    <li><a href="#projects">Projets</a></li>
+    <li><a href="#skills">Compétences</a></li>
+    <li><a href="#education">Formation</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <a href="assets/CV-BLEMOU-Remy-Alternance-Data.pdf" class="nav-cta" target="_blank">CV PDF</a>
+</nav>
 
-<h1>Customer Churn Prediction</h1>
-
-<a class="btn-back" href="../index.html">← Retour au portfolio</a>
-
-</header>
-
-
-
-<section class="project-intro">
-
-<h2>Introduction</h2>
-
-<p>
-
-Ce projet analyse l’impact du <strong>data drift</strong> sur un modèle de
-prédiction du churn client. L'objectif est de comprendre comment l’évolution
-des données dans le temps influence la performance du modèle et de proposer
-une stratégie d’adaptation afin de maintenir un niveau de performance élevé.
-
-</p>
-
-<p>
-
-Le projet inclut une analyse exploratoire des données, une comparaison de
-modèles de machine learning ainsi qu’une optimisation du seuil de décision
-en tenant compte des coûts métier.
-
-</p>
-
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-tag">Disponible · Alternance sept. 2026</div>
+      <h1 class="hero-name">Rémy<br><span class="accent">Blemou</span></h1>
+      <div class="hero-title">Data Analyst · Data Scientist · Business Intelligence</div>
+      <p class="hero-desc">Étudiant en Bachelor Business Data Science à l'UCO Angers. Je transforme les données brutes en insights actionnables grâce à Python, SQL, Power BI et le Machine Learning.</p>
+      <div class="hero-btns">
+        <a href="#projects" class="btn-primary">Voir mes projets</a>
+        <a href="#contact" class="btn-outline">Me contacter</a>
+      </div>
+    </div>
+    <div class="hero-card-wrap">
+      <div class="hero-card">
+        <div class="card-dots">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+        </div>
+        <div class="code-line"><span class="cmt"># analyse_ventes.py</span></div>
+        <div class="code-line"><span class="kw">import</span> pandas <span class="kw">as</span> <span class="cy">pd</span></div>
+        <div class="code-line"><span class="kw">import</span> sqlalchemy <span class="kw">as</span> <span class="cy">sa</span></div>
+        <div class="code-line">&nbsp;</div>
+        <div class="code-line"><span class="cmt"># Connexion PostgreSQL</span></div>
+        <div class="code-line">engine = <span class="cy">sa</span>.<span class="fn">create_engine</span>(</div>
+        <div class="code-line">&nbsp;&nbsp;<span class="str">"postgresql://db:5432/ventes"</span></div>
+        <div class="code-line">)</div>
+        <div class="code-line">&nbsp;</div>
+        <div class="code-line"><span class="cmt"># Extraction & analyse</span></div>
+        <div class="code-line">df = <span class="cy">pd</span>.<span class="fn">read_sql</span>(<span class="str">"SELECT * FROM offres"</span>, engine)</div>
+        <div class="code-line">kpis = df.<span class="fn">groupby</span>(<span class="str">"zone"</span>).<span class="fn">agg</span>({</div>
+        <div class="code-line">&nbsp;&nbsp;<span class="str">"prix"</span>: <span class="str">"mean"</span>, <span class="str">"volume"</span>: <span class="str">"sum"</span></div>
+        <div class="code-line">})</div>
+        <div class="code-line"><span class="cmt"># ✓ Insights générés</span> <span class="code-cursor"></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">SCROLL</div>
 </section>
 
-
-
-<section class="tech-section">
-
-<h2>Technologies utilisées</h2>
-
-<div class="tech-stack">
-
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg">
-
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg">
-
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg">
-
-<img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg">
-
-</div>
-
-<div class="tech-list">
-
-<ul>
-
-<li><strong>Python</strong> — développement du pipeline de machine learning</li>
-
-<li><strong>Pandas</strong> — manipulation et nettoyage des données</li>
-
-<li><strong>NumPy</strong> — calcul numérique</li>
-
-<li><strong>Scikit-learn</strong> — entraînement et évaluation des modèles</li>
-
-<li><strong>Matplotlib / Seaborn</strong> — visualisation des données</li>
-
-</ul>
-
-</div>
-
+<section id="video">
+  <div class="section-inner">
+    <div class="video-inner fade">
+      <div class="section-tag" style="text-align:center;display:block">// présentation</div>
+      <h2 class="section-title" style="text-align:center">Je me présente</h2>
+      <div class="divider" style="margin:0.5rem auto 0.5rem"></div>
+      <p style="color:var(--gray);font-weight:300;margin-bottom:2rem;text-align:center">
+        Une présentation rapide de mon parcours, mes motivations et ce que je peux apporter à votre équipe.
+      </p>
+      <div class="video-wrap">
+        <!-- Quand tu as ta vidéo : dépose-la dans assets/video.mp4 et supprime le placeholder -->
+        <video controls poster="" id="presentation-video" style="display:none">
+          <source src="assets/video.mp4" type="video/mp4">
+        </video>
+        <div class="video-placeholder" id="video-placeholder" onclick="playVideo()">
+          <div class="play-btn">▶</div>
+          <div class="video-placeholder-text">
+            <strong>Vidéo de présentation</strong>
+            Bientôt disponible — revenez vite !
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-
-
-<section class="results">
-
-<h2>Résultats clés</h2>
-
-<div class="results-grid">
-
-<div class="result-card">
-<h3>AUC du modèle</h3>
-<p>≈ 0.878</p>
-</div>
-
-<div class="result-card">
-<h3>Modèle retenu</h3>
-<p>Random Forest</p>
-</div>
-
-<div class="result-card">
-<h3>Réduction du coût</h3>
-<p>≈ 36.5%</p>
-</div>
-
-<div class="result-card">
-<h3>Stratégie</h3>
-<p>Rolling Retraining</p>
-</div>
-
-</div>
-
+<section id="about">
+  <div class="section-inner">
+    <div class="section-tag">// à propos</div>
+    <h2 class="section-title">Qui suis-je ?</h2>
+    <div class="divider"></div>
+    <div class="about-grid">
+      <div class="about-text fade">
+        <p>Je suis <strong>Rémy Blemou</strong>, étudiant en Bachelor Business Data Science à l'UCO Angers (2024–2027), en recherche d'alternance à partir de <strong>septembre 2026</strong>.</p>
+        <p>Passionné par la donnée sous toutes ses formes — exploration, modélisation, visualisation — je me situe à la croisée de la <strong>Data Science</strong>, de la <strong>Business Intelligence</strong> et de l'<strong>ingénierie des données</strong>.</p>
+        <div class="about-quote">« Mon moteur : transformer des données brutes en décisions claires et actionnables pour les organisations. »</div>
+        <p>Fort de 4 expériences professionnelles réelles (SDIS49, AEGA, UCO Angers, CNPSA Conakry), j'ai travaillé sur des pipelines ETL, des dashboards Power BI, du Machine Learning et de la modélisation PostgreSQL.</p>
+      </div>
+      <div class="fade">
+        <div class="tech-logos">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg" alt="R" title="R"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" title="PostgreSQL"/>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/New_Power_BI_Logo.svg" alt="Power BI" title="Power BI"/>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Microsoft_Excel_2013-2019_logo.svg" alt="Excel" title="Excel"/>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg" alt="Scikit-learn" title="Scikit-learn"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git" title="Git"/>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" alt="Linux" title="Linux"/>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-
-
-<section class="project-section">
-
-<h2>1. Evolution du taux de churn</h2>
-
-<div class="graph-card">
-
-<img src="../assets/asset_churn/fig_01_taux_churn_par_periode.png">
-
-<p class="graph-desc">
-
-L’analyse montre une augmentation progressive du taux de churn au fil
-du temps. Cette évolution suggère un changement dans le comportement
-des clients et met en évidence la présence d’un phénomène de
-<strong>data drift</strong>.
-
-</p>
-
-</div>
-
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-tag">// expériences</div>
+    <h2 class="section-title">Parcours professionnel</h2>
+    <div class="divider"></div>
+    <p class="section-sub">4 expériences dans des environnements data réels, de Conakry à Angers.</p>
+    <div class="timeline">
+      <div class="tl-item fade">
+        <div class="tl-dot"></div>
+        <div class="tl-dates">AVR. 2026 — JUIL. 2026</div>
+        <div class="tl-role">Data Engineer & Analyst</div>
+        <div class="tl-org">SDIS49 — Projet NexSIS · Angers</div>
+        <ul class="tl-desc">
+          <li>Pipeline ETL Apache Hop : extraction via API REST et intégration PostgreSQL</li>
+          <li>Conception d'une base de données décisionnelle PostgreSQL pour l'analyse opérationnelle</li>
+          <li>Développement de tableaux de bord DigDash pour le suivi en temps réel</li>
+        </ul>
+        <div class="tags"><span class="tag">Apache Hop (ETL)</span><span class="tag">PostgreSQL</span><span class="tag">DigDash</span><span class="tag">API REST</span></div>
+      </div>
+      <div class="tl-item fade">
+        <div class="tl-dot"></div>
+        <div class="tl-dates">OCT. 2025 — PRÉSENT</div>
+        <div class="tl-role">Data Analyst (Bénévole)</div>
+        <div class="tl-org">AEGA — Angers</div>
+        <ul class="tl-desc">
+          <li>Gestion du cycle complet de la donnée : collecte → nettoyage → dashboards → diffusion</li>
+          <li>Développement et maintenance de dashboards Power BI pour le pilotage stratégique</li>
+          <li>Définition et suivi des KPIs, identification d'insights pour la direction</li>
+        </ul>
+        <div class="tags"><span class="tag">Power BI</span><span class="tag">DAX</span><span class="tag">Excel</span><span class="tag">KPI</span></div>
+      </div>
+      <div class="tl-item fade">
+        <div class="tl-dot"></div>
+        <div class="tl-dates">MAI 2025 — JUIL. 2025</div>
+        <div class="tl-role">Data Analyst</div>
+        <div class="tl-org">Observatoire des données — UCO Angers</div>
+        <ul class="tl-desc">
+          <li>Création de tableaux interactifs Power BI pour l'analyse de l'occupation des salles</li>
+          <li>Nettoyage et modélisation des données brutes issues du SI</li>
+        </ul>
+        <div class="tags"><span class="tag">Power BI</span><span class="tag">Excel</span><span class="tag">Data Cleaning</span></div>
+      </div>
+      <div class="tl-item fade">
+        <div class="tl-dot"></div>
+        <div class="tl-dates">JUIN 2024 — AOÛT 2024</div>
+        <div class="tl-role">Assistant Gestion des Données</div>
+        <div class="tl-org">CNPSA — Conakry, Guinée</div>
+        <ul class="tl-desc">
+          <li>Saisie et fiabilisation des bases Excel pour le calcul des pensions d'agents de l'État</li>
+          <li>Amélioration de la qualité des données et réduction des erreurs de saisie</li>
+        </ul>
+        <div class="tags"><span class="tag">Excel</span><span class="tag">Data Quality</span></div>
+      </div>
+    </div>
+  </div>
 </section>
 
-
-
-<section class="project-section">
-
-<h2>2. Analyse des valeurs manquantes</h2>
-
-<div class="graph-card">
-
-<img src="../assets/asset_churn/fig_05_valeurs_manquantes_class_churn.png">
-
-<p class="graph-desc">
-
-L’analyse des valeurs manquantes montre que certaines variables
-présentent davantage de données manquantes pour les clients ayant churn,
-ce qui peut indiquer une relation entre la qualité des données et
-le comportement des clients.
-
-</p>
-
-</div>
-
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-tag">// projets</div>
+    <h2 class="section-title">Projets réalisés</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Des projets concrets avec des résultats mesurables.</p>
+    <div class="projects-grid">
+      <div class="project-card fade">
+        <img class="project-img" src="assets/asset_churn/fig_01_taux_churn_par_periode.png" alt="Churn" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="project-img-placeholder" style="display:none">🤖</div>
+        <div class="project-body">
+          <div class="project-num">01 · Machine Learning</div>
+          <div class="project-title">Prédiction du Churn Client</div>
+          <div class="project-cat">Python · Scikit-learn · Pandas</div>
+          <p class="project-desc">Modèle ML pour anticiper le départ des clients et permettre des actions de rétention ciblées.</p>
+          <div class="project-metric">✦ Modèle Random Forest — Précision 88% — Réduction simulée churn 36,5%</div>
+          <div class="tags"><span class="tag">Scikit-learn</span><span class="tag">Classification</span><span class="tag">Random Forest</span></div>
+          <div class="project-footer"><a href="Projects/churn.html" class="project-link">Voir le projet</a><span class="tag">2025</span></div>
+        </div>
+      </div>
+      <div class="project-card fade">
+        <img class="project-img" src="assets/immobilier/dashboard1.png" alt="Immobilier" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="project-img-placeholder" style="display:none">📊</div>
+        <div class="project-body">
+          <div class="project-num">02 · Business Intelligence</div>
+          <div class="project-title">Analyse Marché Immobilier</div>
+          <div class="project-cat">R · Power BI · DAX · Excel</div>
+          <p class="project-desc">Analyse de 20 000+ transactions immobilières — tendances de prix et segmentation géographique interactive.</p>
+          <div class="project-metric">✦ 20 000+ transactions analysées</div>
+          <div class="tags"><span class="tag">Power BI</span><span class="tag">R</span><span class="tag">ggplot2</span><span class="tag">DAX</span></div>
+          <div class="project-footer"><a href="Projects/immobilier.html" class="project-link">Voir le projet</a><span class="tag">2025</span></div>
+        </div>
+      </div>
+      <div class="project-card fade">
+        <div class="project-img-placeholder">🚗</div>
+        <div class="project-body">
+          <div class="project-num">03 · IA & Application</div>
+          <div class="project-title">Estimation Prix Véhicules</div>
+          <div class="project-cat">Python · Random Forest · FastAPI · Google Cloud</div>
+          <p class="project-desc">Application marketing avec modèle de prédiction pour estimer les prix de reprise de véhicules d'occasion.</p>
+          <div class="project-metric">✦ Modèle Random Forest déployé via FastAPI sur VM Google Cloud</div>
+          <div class="tags"><span class="tag">Random Forest</span><span class="tag">FastAPI</span><span class="tag">Google Cloud</span></div>
+          <div class="project-footer"><a href="https://github.com/blemou19/vehicle-price-prediction" target="_blank" class="project-link">Voir sur GitHub</a><span class="tag">2025</span></div>
+        </div>
+      </div>
+      <div class="project-card fade">
+        <div class="project-img-placeholder">🗄️</div>
+        <div class="project-body">
+          <div class="project-num">04 · Data Engineering</div>
+          <div class="project-title">Historisation des Offres SQL</div>
+          <div class="project-cat">PostgreSQL · SQL · Modélisation</div>
+          <p class="project-desc">Conception d'une BDD de ventes avec automatisation des imports et log journalier pour le suivi historique.</p>
+          <div class="project-metric">✦ Automatisation complète des imports journaliers</div>
+          <div class="tags"><span class="tag">PostgreSQL</span><span class="tag">SQL avancé</span><span class="tag">Modélisation</span></div>
+          <div class="project-footer"><a href="https://github.com/blemou19/sql-integration-historisation-offres" target="_blank" class="project-link">Voir sur GitHub</a><span class="tag">2024</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-
-
-<section class="project-section">
-
-<h2>3. Sélection de la fenêtre historique</h2>
-
-<div class="graph-card">
-
-<img src="../assets/asset_churn/fig_08_selection_fenetre_historique_w.png">
-
-<p class="graph-desc">
-
-Le backtesting réalisé pour différentes tailles de fenêtre permet
-d’identifier la stratégie d'entraînement optimale.
-Une fenêtre de <strong>w = 12 périodes</strong> offre le meilleur
-compromis entre stabilité du modèle et capacité d’adaptation au drift.
-
-</p>
-
-</div>
-
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-tag">// compétences</div>
+    <h2 class="section-title">Stack technique</h2>
+    <div class="divider"></div>
+    <div class="skills-grid">
+      <div class="skill-cat fade"><div class="skill-cat-icon">📊</div><div class="skill-cat-title">Data & BI</div><div class="skill-pills"><span class="pill">Power BI</span><span class="pill">DAX</span><span class="pill">Power Query</span><span class="pill">Excel</span><span class="pill">Tableau</span><span class="pill">DigDash</span></div></div>
+      <div class="skill-cat fade"><div class="skill-cat-icon">🐍</div><div class="skill-cat-title">Programmation</div><div class="skill-pills"><span class="pill">Python</span><span class="pill">Pandas</span><span class="pill">NumPy</span><span class="pill">Matplotlib</span><span class="pill">R</span><span class="pill">SAS</span></div></div>
+      <div class="skill-cat fade"><div class="skill-cat-icon">🗄️</div><div class="skill-cat-title">Bases de données</div><div class="skill-pills"><span class="pill">PostgreSQL</span><span class="pill">MySQL</span><span class="pill">SQL avancé</span><span class="pill">Modélisation</span></div></div>
+      <div class="skill-cat fade"><div class="skill-cat-icon">🤖</div><div class="skill-cat-title">Machine Learning</div><div class="skill-pills"><span class="pill">Scikit-learn</span><span class="pill">XGBoost</span><span class="pill">Random Forest</span><span class="pill">Classification</span><span class="pill">Régression</span><span class="pill">Clustering</span></div></div>
+      <div class="skill-cat fade"><div class="skill-cat-icon">⚙️</div><div class="skill-cat-title">Data Engineering</div><div class="skill-pills"><span class="pill">Apache Hop (ETL)</span><span class="pill">API REST</span><span class="pill">FastAPI</span><span class="pill">Git</span><span class="pill">Linux</span></div></div>
+      <div class="skill-cat fade"><div class="skill-cat-icon">🧠</div><div class="skill-cat-title">Soft Skills</div><div class="skill-pills"><span class="pill">Rigueur analytique</span><span class="pill">Autonomie</span><span class="pill">Communication</span><span class="pill">Esprit d'équipe</span><span class="pill">Adaptabilité</span><span class="pill">Curiosité</span></div></div>
+    </div>
+  </div>
 </section>
 
-
-
-<section class="project-section">
-
-<h2>4. Optimisation du seuil et coût métier</h2>
-
-<div class="graph-card">
-
-<img src="../assets/asset_churn/fig_10_optimisation_seuil_cout_metier.png">
-
-<p class="graph-desc">
-
-L’optimisation du seuil de décision prend en compte les coûts métier :
-
-</p>
-
-<ul>
-
-<li>Faux négatif : 100 €</li>
-<li>Faux positif : 40 €</li>
-
-</ul>
-
-<p class="graph-desc">
-
-Le seuil optimal estimé à <strong>0.077</strong> permet une réduction
-du coût métier d’environ <strong>36.5%</strong>.
-
-</p>
-
-</div>
-
+<section id="education">
+  <div class="section-inner">
+    <div class="section-tag">// formation</div>
+    <h2 class="section-title">Parcours académique</h2>
+    <div class="divider"></div>
+    <div class="edu-grid">
+      <div class="edu-card fade"><div class="edu-year">2024 – 2027</div><div class="edu-degree">Bachelor Business Data Science</div><div class="edu-school">UCO Angers · France</div><p class="edu-desc">Data Science · Machine Learning · Business Intelligence · Python · SQL · Power BI · Statistiques</p></div>
+      <div class="edu-card fade"><div class="edu-year">2023 – 2024</div><div class="edu-degree">Licence 1 — Développement Logiciel</div><div class="edu-school">Université Gamal Abdel Nasser · Conakry</div><p class="edu-desc">Algorithmique, programmation, développement logiciel, systèmes informatiques.</p></div>
+      <div class="edu-card fade"><div class="edu-year">2023</div><div class="edu-degree">Baccalauréat Sciences Expérimentales</div><div class="edu-school">Lycée Sainte Marie · Conakry · <strong style="color:var(--cyan)">Mention Bien</strong></div><p class="edu-desc">Mathématiques, sciences expérimentales, raisonnement analytique.</p></div>
+    </div>
+  </div>
 </section>
 
-
-
-<section class="skills-learned">
-
-<h2>Compétences développées</h2>
-
-<ul>
-
-<li>Analyse exploratoire de données (EDA)</li>
-
-<li>Détection et analyse du data drift</li>
-
-<li>Comparaison de modèles de machine learning</li>
-
-<li>Backtesting temporel</li>
-
-<li>Optimisation du seuil de classification</li>
-
-<li>Analyse du coût métier</li>
-
-<li>Visualisation de données</li>
-
-</ul>
-
+<section id="github">
+  <div class="section-inner">
+    <div class="section-tag">// github</div>
+    <h2 class="section-title">Activité GitHub</h2>
+    <div class="divider"></div>
+    <div class="github-inner">
+      <div class="github-imgs fade">
+        <img src="https://github-readme-stats.vercel.app/api?username=blemou19&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0f172a&title_color=06B6D4&icon_color=3B82F6" alt="GitHub Stats"/>
+        <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=blemou19&layout=compact&theme=tokyonight&hide_border=true&bg_color=0f172a&title_color=06B6D4" alt="Top Langages"/>
+      </div>
+      <div class="fade">
+        <p class="section-sub" style="margin-bottom:1.2rem">Repositories principaux :</p>
+        <div class="repo-list">
+          <a href="https://github.com/blemou19/churn-prediction-project" class="repo-card" target="_blank"><div class="repo-name">📁 churn-prediction-project</div><div class="repo-desc">Prédiction du churn client — Python, XGBoost, Scikit-learn</div></a>
+          <a href="https://github.com/blemou19/powerbi-immobilier" class="repo-card" target="_blank"><div class="repo-name">📁 powerbi-immobilier</div><div class="repo-desc">Analyse marché immobilier — R, Power BI, DAX</div></a>
+          <a href="https://github.com/blemou19/vehicle-price-prediction" class="repo-card" target="_blank"><div class="repo-name">📁 vehicle-price-prediction</div><div class="repo-desc">Estimation prix véhicules — Python, Random Forest, FastAPI</div></a>
+          <a href="https://github.com/blemou19/sql-integration-historisation-offres" class="repo-card" target="_blank"><div class="repo-name">📁 sql-integration-historisation-offres</div><div class="repo-desc">Historisation des offres — PostgreSQL, SQL avancé</div></a>
+          <a href="https://github.com/blemou19" class="repo-card" target="_blank"><div class="repo-name">→ Voir tous les repositories</div><div class="repo-desc">github.com/blemou19</div></a>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-
-
-<section class="resources">
-
-<h2>Ressources</h2>
-
-<div class="resource-buttons">
-
-<a class="btn-resource" href="../assets/asset_churn/Rapport_Churn.pdf" target="_blank">
-📄 Rapport du projet
-</a>
-
-<a class="btn-resource github" href="https://github.com/blemou19/churn-prediction-project" target="_blank">
-💻 Code GitHub
-</a>
-
-</div>
-
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-inner">
+      <div class="section-tag" style="text-align:center;display:block">// contact</div>
+      <h2 class="section-title">Travaillons ensemble</h2>
+      <div class="divider" style="margin:0.5rem auto 1rem"></div>
+      <p class="section-sub" style="margin:0 auto;text-align:center">Je recherche une alternance à partir de <strong>septembre 2026</strong> en Data Analyse, Data Science ou Business Intelligence.</p>
+      <div class="contact-links">
+        <a href="/cdn-cgi/l/email-protection#b3c1d6decad1dfd6dedcc6f3d4ded2dadf9dd0dcde" class="contact-link">✉️ <span class="__cf_email__" data-cfemail="c1b3a4acb8a3ada4acaeb481a6aca0a8adefa2aeac">[email&#160;protected]</span></a>
+        <a href="tel:+33744192080" class="contact-link">📞 +33 7 44 19 20 80</a>
+        <a href="https://github.com/blemou19" class="contact-link" target="_blank">🐙 GitHub</a>
+        <a href="https://www.linkedin.com/in/rémy-bakary-blemou/" class="contact-link" target="_blank">💼 LinkedIn</a>
+        <a href="assets/CV-BLEMOU-Remy-Alternance-Data.pdf" class="contact-link" target="_blank">📄 Télécharger mon CV</a>
+      </div>
+    </div>
+  </div>
 </section>
 
+<footer>&copy; 2026 · Rémy Blemou · Data Analyst &amp; Data Scientist · Angers, France</footer>
 
-</body>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* Three.js hero particles */
+(function(){
+  const canvas = document.getElementById('hero-canvas');
+  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
+  camera.position.z = 30;
 
-</html>
+  const count = 200;
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(count * 3);
+  for(let i = 0; i < count * 3; i++) pos[i] = (Math.random() - 0.5) * 90;
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const mat = new THREE.PointsMaterial({color:0x06b6d4, size:0.28, transparent:true, opacity:0.8});
+  scene.add(new THREE.Points(geo, mat));
+
+  const lineMat = new THREE.LineBasicMaterial({color:0x2563eb, transparent:true, opacity:0.12});
+  for(let i = 0; i < 70; i++){
+    const lg = new THREE.BufferGeometry();
+    const j = (i + 7) % count;
+    lg.setFromPoints([
+      new THREE.Vector3(pos[i*3], pos[i*3+1], pos[i*3+2]),
+      new THREE.Vector3(pos[j*3], pos[j*3+1], pos[j*3+2])
+    ]);
+    scene.add(new THREE.Line(lg, lineMat));
+  }
+
+  function resize(){
+    const w = canvas.parentElement.clientWidth;
+    const h = canvas.parentElement.clientHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  let t = 0;
+  (function animate(){
+    requestAnimationFrame(animate);
+    t += 0.003;
+    scene.rotation.y = t * 0.25;
+    scene.rotation.x = Math.sin(t * 0.15) * 0.08;
+    renderer.render(scene, camera);
+  })();
+})();
+
+/* Scroll fade */
+// Fade animation only on desktop
+if(window.innerWidth > 900) {
+  document.querySelectorAll('.fade').forEach(el => el.classList.add('animate'));
+}
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if(e.isIntersecting) setTimeout(() => e.target.classList.add('show'), i * 90);
+  });
+}, {threshold: 0.05, rootMargin: '0px 0px -30px 0px'});
+document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+
+/* Active nav */
+const secs = document.querySelectorAll('section[id]');
+const links = document.querySelectorAll('.nav-links a');
+window.add
