@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Estimation Prix Véhicule — Rémy Blemou</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#0f172a; --bg2:#111827; --bg3:#1e293b;
+  --blue:#2563eb; --blue-l:#3b82f6;
+  --cyan:#06b6d4; --cyan-l:#22d3ee;
+  --white:#f1f5fe; --gray:#94a3b8; --gray2:#475569;
+  --border:rgba(59,130,246,0.15);
+  --fh:'Syne',sans-serif; --fb:'DM Sans',sans-serif; --fm:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:var(--fb);line-height:1.7;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 8%;height:64px;background:rgba(15,23,42,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--fh);font-size:1.1rem;font-weight:800;color:var(--white);text-decoration:none;letter-spacing:-0.03em}
+.nav-logo span{color:var(--cyan)}
+.btn-back{font-family:var(--fm);font-size:0.72rem;color:var(--cyan);text-decoration:none;border:1px solid var(--cyan);padding:0.4rem 1.1rem;border-radius:4px;transition:all 0.2s;letter-spacing:0.05em}
+.btn-back:hover{background:var(--cyan);color:var(--bg)}
+
+/* HERO */
+.project-hero{padding:120px 8% 60px;background:var(--bg);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.project-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),var(--blue),transparent)}
+.project-tag{font-family:var(--fm);font-size:0.7rem;color:var(--cyan);letter-spacing:0.18em;margin-bottom:1rem;display:flex;align-items:center;gap:0.6rem}
+.project-tag::before{content:'';display:block;width:36px;height:1px;background:var(--cyan)}
+.project-title{font-family:var(--fh);font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-0.04em;margin-bottom:0.5rem;line-height:1.1}
+.project-title .accent{color:var(--cyan)}
+.project-subtitle{font-size:1rem;color:var(--gray);font-weight:300;max-width:720px;margin-bottom:2rem;line-height:1.8}
+
+/* MÉTRIQUES */
+.results-band{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem}
+.result-pill{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0.8rem 1.4rem;text-align:center;min-width:130px}
+.result-pill .val{font-family:var(--fh);font-size:1.5rem;font-weight:800;color:var(--cyan);display:block;line-height:1}
+.result-pill .lbl{font-family:var(--fm);font-size:0.62rem;color:var(--gray);letter-spacing:0.06em;margin-top:0.3rem;display:block}
+
+/* LIVE BADGE */
+.live-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.3);border-radius:20px;padding:0.4rem 1rem;font-family:var(--fm);font-size:0.72rem;color:var(--cyan);text-decoration:none;transition:all 0.2s;margin-top:0.5rem}
+.live-badge:hover{background:rgba(6,182,212,0.2);transform:translateY(-1px)}
+.live-dot{width:7px;height:7px;background:#22c55e;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* TECH TAGS */
+.tech-band{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1.2rem}
+.tech-tag{font-family:var(--fm);font-size:0.68rem;color:var(--cyan);border:1px solid rgba(6,182,212,0.25);padding:0.2rem 0.6rem;border-radius:3px;background:rgba(6,182,212,0.05)}
+
+/* CONTENT */
+.content{max-width:900px;margin:0 auto;padding:4rem 8%}
+.section-block{margin-bottom:3.5rem}
+.section-block h2{font-family:var(--fh);font-size:1.3rem;font-weight:700;color:var(--white);margin-bottom:1rem;letter-spacing:-0.02em;display:flex;align-items:center;gap:0.6rem}
+.section-block h2::before{content:'';display:block;width:4px;height:1.2rem;background:var(--cyan);border-radius:2px}
+.section-block p{color:var(--gray);font-weight:300;margin-bottom:0.8rem;line-height:1.85}
+.section-block strong{color:var(--white);font-weight:500}
+.section-block ul{color:var(--gray);font-weight:300;padding-left:1.5rem;margin-top:0.5rem}
+.section-block ul li{margin-bottom:0.4rem;line-height:1.7}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;margin-top:1rem;font-size:0.85rem}
+.data-table th{font-family:var(--fm);font-size:0.68rem;color:var(--cyan);letter-spacing:0.08em;padding:0.7rem 1rem;background:var(--bg3);border-bottom:1px solid var(--border);text-align:left}
+.data-table td{padding:0.7rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--gray);font-weight:300}
+.data-table tr:hover td{background:rgba(255,255,255,0.02);color:var(--white)}
+.data-table .highlight td{color:var(--white)}
+.data-table .highlight td:first-child{color:var(--cyan);font-weight:500}
+.badge-retained{background:rgba(6,182,212,0.1);color:var(--cyan);border:1px solid rgba(6,182,212,0.25);padding:0.15rem 0.5rem;border-radius:3px;font-family:var(--fm);font-size:0.65rem}
+
+/* GRAPH CARDS */
+.graph-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:1rem;transition:border-color 0.2s}
+.graph-card:hover{border-color:rgba(6,182,212,0.3)}
+.graph-card img{width:100%;display:block}
+.graph-desc{padding:1.2rem 1.5rem;color:var(--gray);font-size:0.9rem;font-weight:300;line-height:1.8}
+.graph-desc strong{color:var(--white);font-weight:500}
+
+/* CODE BLOCK */
+.code-block{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.2rem 1.5rem;margin-top:1rem;overflow-x:auto}
+.code-block pre{font-family:var(--fm);font-size:0.75rem;color:var(--gray2);line-height:1.8}
+.code-block .kw{color:#7C3AED}
+.code-block .str{color:#10B981}
+.code-block .num{color:#F59E0B}
+.code-block .cy{color:var(--cyan)}
+.code-block .cmt{color:var(--gray2);font-style:italic}
+
+/* SKILLS */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:0.6rem;margin-top:0.8rem}
+.skill-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0.7rem 1rem;font-size:0.85rem;color:var(--gray);font-weight:300;display:flex;align-items:center;gap:0.5rem}
+.skill-item::before{content:'✦';color:var(--cyan);font-size:0.6rem}
+
+/* RESSOURCES */
+.resources-section{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 8%}
+.resources-inner{max-width:900px;margin:0 auto}
+.resources-inner h2{font-family:var(--fh);font-size:1.2rem;font-weight:700;margin-bottom:1.5rem;color:var(--white)}
+.resource-btns{display:flex;flex-wrap:wrap;gap:1rem}
+.btn-resource{display:flex;align-items:center;gap:0.6rem;padding:0.85rem 1.6rem;border-radius:8px;text-decoration:none;font-weight:500;font-size:0.9rem;transition:all 0.2s}
+.btn-github{background:var(--bg3);color:var(--white);border:1px solid var(--border)}
+.btn-github:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+.btn-live{background:var(--blue);color:#fff;box-shadow:0 0 20px rgba(37,99,235,0.3)}
+.btn-live:hover{background:var(--blue-l);transform:translateY(-2px)}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);text-align:center;padding:1.5rem 8%;font-family:var(--fm);font-size:0.7rem;color:var(--gray2)}
+
+/* FADE */
+.fade{opacity:0;transform:translateY(24px);transition:opacity 0.5s ease,transform 0.5s ease}
+.fade.show{opacity:1;transform:translateY(0)}
+@media(max-width:768px){
+  .project-hero{padding:90px 6% 40px}
+  .content{padding:3rem 6%}
+  .resources-section{padding:2rem 6%}
+  nav{padding:0 6%}
+  .fade{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">RB<span>.</span></a>
+  <a href="../index.html" class="btn-back">← Retour au portfolio</a>
+</nav>
+
+<!-- HERO -->
+<div class="project-hero">
+  <div class="project-tag">03 · IA & Application</div>
+  <h1 class="project-title">Estimation Prix<br><span class="accent">Véhicule d'Occasion</span></h1>
+  <p class="project-subtitle">
+    Application complète de Machine Learning pour estimer le prix de reprise d'un véhicule d'occasion. 
+    Modèle Random Forest entraîné sur des données réelles, déployé via <strong>FastAPI + Docker</strong> 
+    sur <strong>Google Cloud Platform</strong> et accessible depuis une interface web.
+  </p>
+
+  <div class="results-band">
+    <div class="result-pill">
+      <span class="val">0.89</span>
+      <span class="lbl">R² du modèle</span>
+    </div>
+    <div class="result-pill">
+      <span class="val">2 612€</span>
+      <span class="lbl">RMSE</span>
+    </div>
+    <div class="result-pill">
+      <span class="val">1 568€</span>
+      <span class="lbl">MAE moyen</span>
+    </div>
+    <div class="result-pill">
+      <span class="val">RF</span>
+      <span class="lbl">Random Forest</span>
+    </div>
+  </div>
+
+  <a href="http://34.38.175.44:6260" target="_blank" class="live-badge">
+    <span class="live-dot"></span> Application en ligne — http://34.38.175.44:6260
+  </a>
+
+  <div class="tech-band">
+    <span class="tech-tag">Python</span>
+    <span class="tech-tag">Scikit-learn</span>
+    <span class="tech-tag">Pandas</span>
+    <span class="tech-tag">NumPy</span>
+    <span class="tech-tag">LightGBM</span>
+    <span class="tech-tag">FastAPI</span>
+    <span class="tech-tag">Docker</span>
+    <span class="tech-tag">Google Cloud</span>
+    <span class="tech-tag">JupyterLab</span>
+  </div>
+</div>
+
+<!-- CONTENU -->
+<div class="content">
+
+  <!-- INTRO -->
+  <div class="section-block fade">
+    <h2>Contexte & objectif</h2>
+    <p>
+      Ce projet répond à un besoin concret : estimer automatiquement le <strong>prix de reprise d'un véhicule d'occasion</strong> 
+      à partir de ses caractéristiques (marque, modèle, kilométrage, année, carburant). 
+    </p>
+    <p>
+      L'enjeu principal est le <strong>feature engineering</strong> — il divise le RMSE par plus de 2 (de 5 720 € à 2 612 €) 
+      et constitue la contribution clé du projet. Le modèle final est déployé en production via une API REST 
+      accessible depuis une interface web sur Google Cloud.
+    </p>
+  </div>
+
+  <!-- FEATURE ENGINEERING -->
+  <div class="section-block fade">
+    <h2>Feature Engineering</h2>
+    <p>L'étape la plus déterminante du projet — elle divise le RMSE par <strong>plus de 2</strong>.</p>
+    <table class="data-table">
+      <thead>
+        <tr><th>Variable créée</th><th>Formule</th><th>Rôle</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code style="font-family:var(--fm);color:var(--cyan)">age_veh</code></td><td>annee_facture − annee</td><td>Usure réelle du véhicule</td></tr>
+        <tr><td><code style="font-family:var(--fm);color:var(--cyan)">km_par_an</code></td><td>km / (age + 1)</td><td>Intensité d'utilisation</td></tr>
+        <tr><td><code style="font-family:var(--fm);color:var(--cyan)">log_km</code></td><td>log1p(kilométrage)</td><td>Lissage des valeurs extrêmes</td></tr>
+        <tr><td><code style="font-family:var(--fm);color:var(--cyan)">age_x_km</code></td><td>age × kilométrage</td><td>Interaction usure × km</td></tr>
+        <tr><td><code style="font-family:var(--fm);color:var(--cyan)">is_sport</code></td><td>Détection GTI, RS, SPORT</td><td>Versions sportives</td></tr>
+        <tr><td><code style="font-family:var(--fm);color:var(--cyan)">is_premium</code></td><td>Détection BUSINESS, EXECUTIVE</td><td>Versions haut de gamme</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:1rem;font-size:0.85rem">
+      Les variables catégorielles (<code style="font-family:var(--fm);color:var(--cyan)">marque</code>, <code style="font-family:var(--fm);color:var(--cyan)">carburant</code>, <code style="font-family:var(--fm);color:var(--cyan)">modele</code>) 
+      sont encodées par <strong>target encoding</strong> — chaque catégorie est remplacée par la moyenne des prix observés.
+    </p>
+  </div>
+
+  <!-- COMPARAISON MODÈLES -->
+  <div class="section-block fade">
+    <h2>Comparaison des modèles</h2>
+    <table class="data-table">
+      <thead>
+        <tr><th>Modèle</th><th>RMSE (€)</th><th>R²</th><th>Temps</th><th>Décision</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight">
+          <td>Random Forest ★</td>
+          <td>2 612</td>
+          <td>0.89</td>
+          <td>44 sec</td>
+          <td><span class="badge-retained">Retenu</span></td>
+        </tr>
+        <tr>
+          <td>LightGBM</td>
+          <td>2 800</td>
+          <td>0.87</td>
+          <td>27 sec</td>
+          <td style="color:var(--gray2)">Non retenu</td>
+        </tr>
+        <tr>
+          <td>MLP (réseau de neurones)</td>
+          <td>> 5 000</td>
+          <td>< 0.80</td>
+          <td>102 sec</td>
+          <td style="color:var(--gray2)">Non retenu</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:1rem;font-size:0.85rem">
+      Le <strong>Random Forest (150 arbres, profondeur 30)</strong> offre le meilleur compromis 
+      précision / temps d'entraînement. L'intervalle de confiance à 95% est calculé à partir 
+      de la variance entre les arbres (± 1.96 × écart-type).
+    </p>
+  </div>
+
+  <!-- GRAPHIQUES ÉVALUATION -->
+  <div class="section-block fade">
+    <h2>Évaluation du modèle Random Forest</h2>
+    <div class="graph-card">
+      <img src="../assets/asset_prediction_prix_voiture/rf_evaluation.png" alt="Évaluation Random Forest"/>
+      <div class="graph-desc">
+        Graphiques d'évaluation du modèle Random Forest retenu : distribution des résidus, 
+        valeurs prédites vs réelles, et importance des variables. Le R² de <strong>0.89</strong> 
+        confirme la bonne capacité prédictive du modèle.
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block fade">
+    <h2>Comparaison Random Forest vs LightGBM</h2>
+    <div class="graph-card">
+      <img src="../assets/asset_prediction_prix_voiture/LGBM_evaluation.png" alt="Évaluation LightGBM"/>
+      <div class="graph-desc">
+        Comparaison des performances entre Random Forest et LightGBM. Malgré un temps d'entraînement 
+        plus rapide, LightGBM affiche un RMSE de <strong>2 800 €</strong> contre <strong>2 612 €</strong> 
+        pour le Random Forest — d'où le choix final en faveur du RF.
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERFACE WEB -->
+  <div class="section-block fade">
+    <h2>Interface web & déploiement</h2>
+    <div class="graph-card">
+      <img src="../assets/asset_prediction_prix_voiture/Interface_web.png" alt="Interface web de l'application"/>
+      <div class="graph-desc">
+        Interface web accessible depuis un navigateur. L'utilisateur saisit les caractéristiques 
+        du véhicule et obtient instantanément une <strong>estimation du prix</strong> avec 
+        un intervalle de confiance à 95%.
+      </div>
+    </div>
+
+    <p style="margin-top:1.5rem">L'API est structurée autour de deux routes principales :</p>
+    <div class="code-block">
+      <pre><span class="cmt"># GET /marques → liste des marques disponibles</span>
+<span class="cmt"># POST /predict → estimation du prix</span>
+
+{
+  <span class="str">"marque"</span>: <span class="str">"CITROEN"</span>,
+  <span class="str">"modele"</span>: <span class="str">"C4 Picasso 1.6 HDi"</span>,
+  <span class="str">"annee"</span>: <span class="num">2018</span>,
+  <span class="str">"kilometrage"</span>: <span class="num">80000</span>,
+  <span class="str">"carburant"</span>: <span class="str">"Diesel"</span>
+}
+
+<span class="cmt"># Réponse :</span>
+{
+  <span class="str">"prix_estime"</span>: <span class="num">12450.00</span>,
+  <span class="str">"intervalle"</span>: { <span class="str">"bas"</span>: <span class="num">10527</span>, <span class="str">"haut"</span>: <span class="num">14372</span> }
+}</pre>
+    </div>
+  </div>
+
+  <!-- COMPÉTENCES -->
+  <div class="section-block fade">
+    <h2>Compétences développées</h2>
+    <div class="skills-grid">
+      <div class="skill-item">Feature engineering avancé</div>
+      <div class="skill-item">Comparaison de modèles ML</div>
+      <div class="skill-item">Random Forest & LightGBM</div>
+      <div class="skill-item">Target encoding</div>
+      <div class="skill-item">API REST avec FastAPI</div>
+      <div class="skill-item">Containerisation Docker</div>
+      <div class="skill-item">Déploiement Google Cloud</div>
+      <div class="skill-item">Intervalle de confiance ML</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- RESSOURCES -->
+<div class="resources-section">
+  <div class="resources-inner fade">
+    <h2>Ressources du projet</h2>
+    <div class="resource-btns">
+      <a href="http://34.38.175.44:6260" target="_blank" class="btn-resource btn-live">
+        🚀 Application en ligne
+      </a>
+      <a href="https://github.com/blemou19/vehicle-price-prediction" target="_blank" class="btn-resource btn-github">
+        🐙 Code source GitHub
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2026 · Rémy Blemou · <a href="../index.html" style="color:var(--cyan);text-decoration:none">← Retour au portfolio</a>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if(e.isIntersecting) setTimeout(() => e.target.classList.add('show'), i * 100);
+  });
+}, {threshold: 0.05});
+document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
