@@ -1,47 +1,248 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="fr">
 <head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Analyse Marché Immobilier — Rémy Blemou</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#0f172a; --bg2:#111827; --bg3:#1e293b;
+  --blue:#2563eb; --blue-l:#3b82f6;
+  --cyan:#06b6d4; --cyan-l:#22d3ee;
+  --white:#f1f5fe; --gray:#94a3b8; --gray2:#475569;
+  --border:rgba(59,130,246,0.15);
+  --fh:'Syne',sans-serif; --fb:'DM Sans',sans-serif; --fm:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:var(--fb);line-height:1.7;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px}
 
-<meta charset="UTF-8">
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 8%;height:64px;background:rgba(15,23,42,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--fh);font-size:1.1rem;font-weight:800;color:var(--white);text-decoration:none;letter-spacing:-0.03em}
+.nav-logo span{color:var(--cyan)}
+.btn-back{font-family:var(--fm);font-size:0.72rem;color:var(--cyan);text-decoration:none;border:1px solid var(--cyan);padding:0.4rem 1.1rem;border-radius:4px;transition:all 0.2s}
+.btn-back:hover{background:var(--cyan);color:var(--bg)}
 
-<title>Real Estate Data Analysis</title>
+.project-hero{padding:120px 8% 60px;background:var(--bg);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.project-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),var(--blue),transparent)}
+.project-tag{font-family:var(--fm);font-size:0.7rem;color:var(--cyan);letter-spacing:0.18em;margin-bottom:1rem;display:flex;align-items:center;gap:0.6rem}
+.project-tag::before{content:'';display:block;width:36px;height:1px;background:var(--cyan)}
+.project-title{font-family:var(--fh);font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-0.04em;margin-bottom:0.5rem;line-height:1.1}
+.project-title .accent{color:var(--cyan)}
+.project-subtitle{font-size:1rem;color:var(--gray);font-weight:300;max-width:720px;margin-bottom:2rem;line-height:1.8}
 
-<link rel="stylesheet" href="../style.css">
+.results-band{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem}
+.result-pill{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0.8rem 1.4rem;text-align:center;min-width:130px}
+.result-pill .val{font-family:var(--fh);font-size:1.5rem;font-weight:800;color:var(--cyan);display:block;line-height:1}
+.result-pill .lbl{font-family:var(--fm);font-size:0.62rem;color:var(--gray);letter-spacing:0.06em;margin-top:0.3rem;display:block}
 
+.tech-band{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1.2rem}
+.tech-tag{font-family:var(--fm);font-size:0.68rem;color:var(--cyan);border:1px solid rgba(6,182,212,0.25);padding:0.2rem 0.6rem;border-radius:3px;background:rgba(6,182,212,0.05)}
+
+.content{max-width:1000px;margin:0 auto;padding:4rem 8%}
+.section-block{margin-bottom:3.5rem}
+.section-block h2{font-family:var(--fh);font-size:1.3rem;font-weight:700;color:var(--white);margin-bottom:1rem;letter-spacing:-0.02em;display:flex;align-items:center;gap:0.6rem}
+.section-block h2::before{content:'';display:block;width:4px;height:1.2rem;background:var(--cyan);border-radius:2px}
+.section-block p{color:var(--gray);font-weight:300;margin-bottom:0.8rem;line-height:1.85}
+.section-block strong{color:var(--white);font-weight:500}
+
+.graph-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:1rem;transition:border-color 0.2s}
+.graph-card:hover{border-color:rgba(6,182,212,0.3)}
+.graph-card img{width:100%;display:block}
+.graph-desc{padding:1.2rem 1.5rem;color:var(--gray);font-size:0.9rem;font-weight:300;line-height:1.8}
+.graph-desc strong{color:var(--white);font-weight:500}
+
+/* 2-column layout for screenshots */
+.graphs-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1rem}
+@media(max-width:768px){.graphs-grid{grid-template-columns:1fr}}
+
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:0.6rem;margin-top:0.8rem}
+.skill-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0.7rem 1rem;font-size:0.85rem;color:var(--gray);font-weight:300;display:flex;align-items:center;gap:0.5rem}
+.skill-item::before{content:'✦';color:var(--cyan);font-size:0.6rem}
+
+.resources-section{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 8%}
+.resources-inner{max-width:1000px;margin:0 auto}
+.resources-inner h2{font-family:var(--fh);font-size:1.2rem;font-weight:700;margin-bottom:1.5rem;color:var(--white)}
+.resource-btns{display:flex;flex-wrap:wrap;gap:1rem}
+.btn-resource{display:flex;align-items:center;gap:0.6rem;padding:0.85rem 1.6rem;border-radius:8px;text-decoration:none;font-weight:500;font-size:0.9rem;transition:all 0.2s}
+.btn-github{background:var(--bg3);color:var(--white);border:1px solid var(--border)}
+.btn-github:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+
+footer{background:var(--bg);border-top:1px solid var(--border);text-align:center;padding:1.5rem 8%;font-family:var(--fm);font-size:0.7rem;color:var(--gray2)}
+
+.fade{opacity:0;transform:translateY(24px);transition:opacity 0.5s ease,transform 0.5s ease}
+.fade.show{opacity:1;transform:translateY(0)}
+@media(max-width:768px){
+  .project-hero{padding:90px 6% 40px}
+  .content{padding:3rem 6%}
+  .resources-section{padding:2rem 6%}
+  nav{padding:0 6%}
+  .fade{opacity:1;transform:none}
+}
+</style>
 </head>
-
 <body>
 
-<h1>Real Estate Data Analysis</h1>
+<nav>
+  <a href="../index.html" class="nav-logo">RB<span>.</span></a>
+  <a href="../index.html" class="btn-back">← Retour au portfolio</a>
+</nav>
 
-<p>
+<div class="project-hero">
+  <div class="project-tag">02 · Business Intelligence</div>
+  <h1 class="project-title">Analyse des Valeurs<br><span class="accent">Foncières 2023–2025</span></h1>
+  <p class="project-subtitle">
+    Rapport BI complet sur les données publiques DVF (Demandes de Valeurs Foncières) de <strong>data.gouv.fr</strong>. 
+    Analyse de <strong>3 millions de transactions immobilières</strong> en France sur 3 ans — 
+    vision globale du marché, prix au m², dynamiques territoriales et segmentation par tranche de prix.
+  </p>
 
-Analyse de plus de 20 000 transactions immobilières avec R et Power BI pour identifier les tendances de prix.
+  <div class="results-band">
+    <div class="result-pill">
+      <span class="val">3M</span>
+      <span class="lbl">Transactions analysées</span>
+    </div>
+    <div class="result-pill">
+      <span class="val">1,72T€</span>
+      <span class="lbl">Valeur foncière totale</span>
+    </div>
+    <div class="result-pill">
+      <span class="val">463€</span>
+      <span class="lbl">Prix moyen au m²</span>
+    </div>
+    <div class="result-pill">
+      <span class="val">2023–25</span>
+      <span class="lbl">Période analysée</span>
+    </div>
+  </div>
 
-</p>
+  <div class="tech-band">
+    <span class="tech-tag">Power BI</span>
+    <span class="tech-tag">DAX</span>
+    <span class="tech-tag">Power Query</span>
+    <span class="tech-tag">R</span>
+    <span class="tech-tag">Azure Maps</span>
+    <span class="tech-tag">DVF data.gouv.fr</span>
+  </div>
+</div>
 
-<h2>Dashboards</h2>
+<div class="content">
 
-<img src="../assets/dashboard1.png" width="700">
+  <!-- INTRO -->
+  <div class="section-block fade">
+    <h2>Contexte & objectif</h2>
+    <p>
+      Ce projet analyse les <strong>Demandes de Valeurs Foncières (DVF)</strong>, données publiques disponibles sur data.gouv.fr, 
+      pour produire une vision synthétique et interactive du marché immobilier français sur la période 2023–2025.
+    </p>
+    <p>
+      Le rapport Power BI est structuré en <strong>5 pages thématiques</strong> : Accueil, Vision Globale, Arborescence de classification, 
+      Analyse des tranches de prix au m², et Tendances. Chaque page intègre des filtres croisés permettant une exploration 
+      dynamique par commune, département, nature de mutation, année et tranche de prix.
+    </p>
+  </div>
 
-<img src="../assets/dashboard2.png" width="700">
+  <!-- ACCUEIL -->
+  <div class="section-block fade">
+    <h2>1. Page d'accueil du rapport</h2>
+    <div class="graph-card">
+      <img src="../assets/asset_immobilier/Accueil.png" alt="Accueil rapport immobilier"
+           onerror="this.src='../assets/asset_immobilier/Vu_ensemble.png'"/>
+      <div class="graph-desc">
+        Page d'accueil du rapport Power BI — présentation du périmètre d'analyse : données DVF 2023–2025, 
+        navigation vers les 5 sections du rapport. Conception épurée avec identité visuelle cohérente.
+      </div>
+    </div>
+  </div>
 
-<h2>Insights</h2>
+  <!-- VISION GLOBALE -->
+  <div class="section-block fade">
+    <h2>2. Vision Globale du marché</h2>
+    <div class="graph-card">
+      <img src="../assets/asset_immobilier/Vu_ensemble.png" alt="Vision globale marché immobilier"
+           onerror="this.src='../assets/asset_immobilier/Vu_ensemble.png'"/>
+      <div class="graph-desc">
+        Vue d'ensemble du marché immobilier français : <strong>3 millions de mutations</strong> analysées, 
+        <strong>1,72T€</strong> de valeur foncière totale. Carte interactive Azure Maps avec 
+        répartition géographique des transactions par département, évolution temporelle de la valeur foncière 
+        et répartition par nature de mutation (99% de ventes).
+      </div>
+    </div>
+  </div>
 
-<ul>
+  <!-- ARBORESCENCE -->
+  <div class="section-block fade">
+    <h2>3. Arborescence de classification des mutations</h2>
+    <div class="graph-card">
+      <img src="../assets/asset_immobilier/Descision_tree.png" alt="Arborescence classification mutations"
+           onerror="this.src='../assets/asset_immobilier/Vu_ensemble.png'"/>
+      <div class="graph-desc">
+        Visualisation avancée en arborescence (decomposition tree) permettant de driller 
+        de <strong>Type local → Département → Commune → Année → Tranche prix m²</strong>. 
+        Prix au m² moyen de <strong>463,09 €</strong>. Filtres croisés dynamiques sur l'ensemble des dimensions.
+      </div>
+    </div>
+  </div>
 
-<li>Analyse des prix par région</li>
-<li>Distribution des ventes</li>
-<li>Tendances temporelles</li>
+  <!-- ANALYSE TRANCHES -->
+  <div class="section-block fade">
+    <h2>4. Analyse par tranches de prix au m²</h2>
+    <div class="graph-card">
+      <img src="../assets/asset_immobilier/Tendance_m2.png" alt="Analyse tranches prix m²"
+           onerror="this.src='../assets/asset_immobilier/Vu_ensemble.png'"/>
+      <div class="graph-desc">
+        Segmentation du marché en <strong>5 tranches de prix au m²</strong> (0–500€ · 501–1500€ · 1501–2500€ · 2501–4000€ · >4000€). 
+        Tableau de classification, évolution mensuelle de la valeur foncière par tranche et répartition en donut chart. 
+        La tranche 501–1500€/m² représente <strong>31% du marché</strong> avec 532,92Md€.
+      </div>
+    </div>
+  </div>
 
-</ul>
+  <!-- COMPÉTENCES -->
+  <div class="section-block fade">
+    <h2>Compétences développées</h2>
+    <div class="skills-grid">
+      <div class="skill-item">Power BI avancé (DAX, Power Query)</div>
+      <div class="skill-item">Azure Maps & cartographie</div>
+      <div class="skill-item">Decomposition Tree</div>
+      <div class="skill-item">Segmentation & analyse de marché</div>
+      <div class="skill-item">Données publiques open data</div>
+      <div class="skill-item">Design de rapport BI</div>
+      <div class="skill-item">Filtres croisés dynamiques</div>
+      <div class="skill-item">Analyse temporelle</div>
+    </div>
+  </div>
 
-<h2>Liens</h2>
+</div>
 
-<a href="https://github.com/blemou19">GitHub</a>
+<div class="resources-section">
+  <div class="resources-inner fade">
+    <h2>Ressources du projet</h2>
+    <div class="resource-btns">
+      <a href="https://github.com/blemou19/powerbi-immobilier" target="_blank" class="btn-resource btn-github">
+        🐙 Code source GitHub
+      </a>
+    </div>
+  </div>
+</div>
 
+<footer>
+  &copy; 2026 · Rémy Blemou · <a href="../index.html" style="color:var(--cyan);text-decoration:none">← Retour au portfolio</a>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if(e.isIntersecting) setTimeout(() => e.target.classList.add('show'), i * 100);
+  });
+}, {threshold: 0.05});
+document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+</script>
 </body>
-
 </html>
