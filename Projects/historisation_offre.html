@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SQL Intégration & Historisation — Rémy Blemou</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#0f172a; --bg2:#111827; --bg3:#1e293b;
+  --blue:#2563eb; --blue-l:#3b82f6;
+  --cyan:#06b6d4; --cyan-l:#22d3ee;
+  --white:#f1f5fe; --gray:#94a3b8; --gray2:#475569;
+  --border:rgba(59,130,246,0.15);
+  --fh:'Syne',sans-serif; --fb:'DM Sans',sans-serif; --fm:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:var(--fb);line-height:1.7;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 8%;height:64px;background:rgba(15,23,42,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--fh);font-size:1.1rem;font-weight:800;color:var(--white);text-decoration:none;letter-spacing:-0.03em}
+.nav-logo span{color:var(--cyan)}
+.btn-back{font-family:var(--fm);font-size:0.72rem;color:var(--cyan);text-decoration:none;border:1px solid var(--cyan);padding:0.4rem 1.1rem;border-radius:4px;transition:all 0.2s}
+.btn-back:hover{background:var(--cyan);color:var(--bg)}
+
+.project-hero{padding:120px 8% 60px;background:var(--bg);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.project-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),var(--blue),transparent)}
+.project-tag{font-family:var(--fm);font-size:0.7rem;color:var(--cyan);letter-spacing:0.18em;margin-bottom:1rem;display:flex;align-items:center;gap:0.6rem}
+.project-tag::before{content:'';display:block;width:36px;height:1px;background:var(--cyan)}
+.project-title{font-family:var(--fh);font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-0.04em;margin-bottom:0.5rem;line-height:1.1}
+.project-title .accent{color:var(--cyan)}
+.project-subtitle{font-size:1rem;color:var(--gray);font-weight:300;max-width:720px;margin-bottom:2rem;line-height:1.8}
+
+.results-band{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem}
+.result-pill{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0.8rem 1.4rem;text-align:center;min-width:130px}
+.result-pill .val{font-family:var(--fh);font-size:1.5rem;font-weight:800;color:var(--cyan);display:block;line-height:1}
+.result-pill .lbl{font-family:var(--fm);font-size:0.62rem;color:var(--gray);letter-spacing:0.06em;margin-top:0.3rem;display:block}
+
+.tech-band{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1.2rem}
+.tech-tag{font-family:var(--fm);font-size:0.68rem;color:var(--cyan);border:1px solid rgba(6,182,212,0.25);padding:0.2rem 0.6rem;border-radius:3px;background:rgba(6,182,212,0.05)}
+
+.content{max-width:900px;margin:0 auto;padding:4rem 8%}
+.section-block{margin-bottom:3.5rem}
+.section-block h2{font-family:var(--fh);font-size:1.3rem;font-weight:700;color:var(--white);margin-bottom:1rem;letter-spacing:-0.02em;display:flex;align-items:center;gap:0.6rem}
+.section-block h2::before{content:'';display:block;width:4px;height:1.2rem;background:var(--cyan);border-radius:2px}
+.section-block p{color:var(--gray);font-weight:300;margin-bottom:0.8rem;line-height:1.85}
+.section-block strong{color:var(--white);font-weight:500}
+.section-block ul{color:var(--gray);font-weight:300;padding-left:1.5rem;margin-top:0.5rem}
+.section-block ul li{margin-bottom:0.4rem;line-height:1.7}
+
+/* Pipeline flow */
+.pipeline{display:flex;flex-wrap:wrap;gap:0;margin:1.5rem 0;align-items:center}
+.pipe-step{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0.9rem 1.2rem;text-align:center;min-width:130px;position:relative;transition:border-color 0.2s}
+.pipe-step:hover{border-color:rgba(6,182,212,0.4)}
+.pipe-icon{font-size:1.4rem;display:block;margin-bottom:0.3rem}
+.pipe-name{font-family:var(--fm);font-size:0.7rem;color:var(--white);font-weight:500}
+.pipe-desc{font-size:0.72rem;color:var(--gray2);margin-top:0.2rem}
+.pipe-arrow{font-size:1.2rem;color:var(--cyan);padding:0 0.5rem;flex-shrink:0}
+
+/* Code block */
+.code-block{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.2rem 1.5rem;margin-top:1rem;overflow-x:auto}
+.code-block pre{font-family:var(--fm);font-size:0.75rem;color:var(--gray2);line-height:1.9}
+.code-block .kw{color:#7C3AED}
+.code-block .cm{color:var(--gray2);font-style:italic}
+.code-block .str{color:#10B981}
+.code-block .cy{color:var(--cyan)}
+.code-block .num{color:#F59E0B}
+.code-block .fn{color:var(--blue-l)}
+
+/* Schema table */
+.schema-table{width:100%;border-collapse:collapse;margin-top:1rem;font-size:0.84rem}
+.schema-table th{font-family:var(--fm);font-size:0.65rem;color:var(--cyan);letter-spacing:0.08em;padding:0.6rem 1rem;background:var(--bg3);border-bottom:1px solid var(--border);text-align:left}
+.schema-table td{padding:0.6rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--gray);font-weight:300}
+.schema-table tr:hover td{background:rgba(255,255,255,0.02)}
+.schema-table code{font-family:var(--fm);color:var(--cyan);font-size:0.8rem}
+
+/* Case cards */
+.cases-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem;margin-top:1rem}
+.case-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.2rem;transition:border-color 0.2s}
+.case-card:hover{border-color:rgba(6,182,212,0.3)}
+.case-num{font-family:var(--fm);font-size:0.65rem;color:var(--cyan);letter-spacing:0.1em;margin-bottom:0.5rem}
+.case-title{font-family:var(--fh);font-size:0.95rem;font-weight:700;color:var(--white);margin-bottom:0.4rem}
+.case-desc{font-size:0.82rem;color:var(--gray);font-weight:300;line-height:1.65}
+
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:0.6rem;margin-top:0.8rem}
+.skill-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0.7rem 1rem;font-size:0.85rem;color:var(--gray);font-weight:300;display:flex;align-items:center;gap:0.5rem}
+.skill-item::before{content:'✦';color:var(--cyan);font-size:0.6rem}
+
+.resources-section{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 8%}
+.resources-inner{max-width:900px;margin:0 auto}
+.resources-inner h2{font-family:var(--fh);font-size:1.2rem;font-weight:700;margin-bottom:1.5rem;color:var(--white)}
+.resource-btns{display:flex;flex-wrap:wrap;gap:1rem}
+.btn-resource{display:flex;align-items:center;gap:0.6rem;padding:0.85rem 1.6rem;border-radius:8px;text-decoration:none;font-weight:500;font-size:0.9rem;transition:all 0.2s}
+.btn-github{background:var(--bg3);color:var(--white);border:1px solid var(--border)}
+.btn-github:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+.btn-doc{background:var(--blue);color:#fff;box-shadow:0 0 20px rgba(37,99,235,0.3)}
+.btn-doc:hover{background:var(--blue-l);transform:translateY(-2px)}
+
+footer{background:var(--bg);border-top:1px solid var(--border);text-align:center;padding:1.5rem 8%;font-family:var(--fm);font-size:0.7rem;color:var(--gray2)}
+
+.fade{opacity:0;transform:translateY(24px);transition:opacity 0.5s ease,transform 0.5s ease}
+.fade.show{opacity:1;transform:translateY(0)}
+@media(max-width:768px){
+  .project-hero{padding:90px 6% 40px}
+  .content{padding:3rem 6%}
+  .resources-section{padding:2rem 6%}
+  nav{padding:0 6%}
+  .pipeline{flex-direction:column;align-items:flex-start}
+  .pipe-arrow{transform:rotate(90deg)}
+  .fade{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">RB<span>.</span></a>
+  <a href="../index.html" class="btn-back">← Retour au portfolio</a>
+</nav>
+
+<div class="project-hero">
+  <div class="project-tag">04 · Data Engineering · SQL</div>
+  <h1 class="project-title">Intégration &<br><span class="accent">Historisation des Offres</span></h1>
+  <p class="project-subtitle">
+    Système d'intégration automatisée de fichiers CSV journaliers en SQL Server avec 
+    <strong>table de staging</strong>, <strong>historisation des offres</strong> par SCD Type 2, 
+    <strong>contrôles de cohérence</strong>, journalisation des traitements et sécurisation par contraintes et index.
+    Conçu comme un flux batch réel en environnement professionnel.
+  </p>
+
+  <div class="results-band">
+    <div class="result-pill">
+      <span class="val">SCD2</span>
+      <span class="lbl">Historisation</span>
+    </div>
+    <div class="result-pill">
+      <span class="val">3</span>
+      <span class="lbl">Cas métiers gérés</span>
+    </div>
+    <div class="result-pill">
+      <span class="val">V2</span>
+      <span class="lbl">Multi-fichiers</span>
+    </div>
+    <div class="result-pill">
+      <span class="val">100%</span>
+      <span class="lbl">Idempotent</span>
+    </div>
+  </div>
+
+  <div class="tech-band">
+    <span class="tech-tag">SQL Server (T-SQL)</span>
+    <span class="tech-tag">BULK INSERT</span>
+    <span class="tech-tag">Staging Table</span>
+    <span class="tech-tag">SCD Type 2</span>
+    <span class="tech-tag">ProcessLog</span>
+    <span class="tech-tag">Cursor</span>
+    <span class="tech-tag">Index unique</span>
+    <span class="tech-tag">TRY/CATCH</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- INTRO -->
+  <div class="section-block fade">
+    <h2>Contexte & objectif</h2>
+    <p>
+      Ce projet simule un <strong>flux d'intégration batch quotidien</strong> en environnement professionnel : 
+      chaque jour, un fichier CSV nommé <code style="font-family:var(--fm);color:var(--cyan)">DATA_YYYYMMDD.csv</code> 
+      est importé, nettoyé et intégré dans une base de données SQL Server.
+    </p>
+    <p>
+      L'enjeu principal est l'<strong>historisation des offres commerciales</strong> — chaque changement de prix, 
+      disparition ou fermeture de magasin doit être tracé avec une date de début et de fin de validité 
+      (principe du <strong>Slowly Changing Dimension Type 2</strong>). 
+      Un système de log (<code style="font-family:var(--fm);color:var(--cyan)">ProcessLog</code>) 
+      garantit la traçabilité et l'idempotence des traitements.
+    </p>
+  </div>
+
+  <!-- PIPELINE -->
+  <div class="section-block fade">
+    <h2>Pipeline de traitement</h2>
+    <div class="pipeline">
+      <div class="pipe-step">
+        <span class="pipe-icon">📂</span>
+        <span class="pipe-name">CSV Journalier</span>
+        <span class="pipe-desc">DATA_YYYYMMDD.csv</span>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step">
+        <span class="pipe-icon">🗂️</span>
+        <span class="pipe-name">Staging</span>
+        <span class="pipe-desc">BULK INSERT + nettoyage</span>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step">
+        <span class="pipe-icon">⚙️</span>
+        <span class="pipe-name">Traitement</span>
+        <span class="pipe-desc">3 cas métiers</span>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step">
+        <span class="pipe-icon">🗄️</span>
+        <span class="pipe-name">Offer (SCD2)</span>
+        <span class="pipe-desc">PeriodStart / PeriodEnd</span>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step">
+        <span class="pipe-icon">📋</span>
+        <span class="pipe-name">ProcessLog</span>
+        <span class="pipe-desc">SUCCESS / ERROR</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODÈLE DE DONNÉES -->
+  <div class="section-block fade">
+    <h2>Modèle de données</h2>
+    <p>La table centrale <code style="font-family:var(--fm);color:var(--cyan)">dbo.Offer</code> implémente le pattern SCD Type 2 :</p>
+    <table class="schema-table">
+      <thead>
+        <tr><th>Colonne</th><th>Type</th><th>Rôle</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>NumberID</code></td><td>INT</td><td>Identifiant unique de l'offre</td></tr>
+        <tr><td><code>StoreNumberID</code></td><td>INT</td><td>Identifiant du magasin</td></tr>
+        <tr><td><code>EAN</code></td><td>BIGINT</td><td>Code article</td></tr>
+        <tr><td><code>Price</code></td><td>MONEY</td><td>Prix appliqué</td></tr>
+        <tr><td><code>PeriodStart</code></td><td>DATETIME</td><td>Début de validité</td></tr>
+        <tr><td><code>PeriodEnd</code></td><td>DATETIME</td><td>Fin de validité — <strong style="color:var(--cyan)">9999-12-31 = offre active</strong></td></tr>
+        <tr><td><code>VerifiedDate</code></td><td>DATETIME</td><td>Dernière date de présence dans un fichier</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3 CAS MÉTIERS -->
+  <div class="section-block fade">
+    <h2>3 cas métiers gérés automatiquement</h2>
+    <div class="cases-grid">
+      <div class="case-card">
+        <div class="case-num">CAS 01</div>
+        <div class="case-title">Prix modifié</div>
+        <p class="case-desc">L'offre active est clôturée (<code style="font-family:var(--fm);color:var(--cyan)">PeriodEnd = @FileDate</code>) et une nouvelle offre est créée avec le nouveau prix.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-num">CAS 02</div>
+        <div class="case-title">Article absent du relevé</div>
+        <p class="case-desc">Une offre active non présente dans le fichier du jour est automatiquement clôturée — l'article n'est plus proposé.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-num">CAS 03</div>
+        <div class="case-title">Magasin fermé</div>
+        <p class="case-desc">Toutes les offres actives d'un magasin dont la <code style="font-family:var(--fm);color:var(--cyan)">closingdate</code> est atteinte sont clôturées en une seule opération.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CODE EXEMPLE -->
+  <div class="section-block fade">
+    <h2>Extrait de code — Nettoyage & contrôle qualité</h2>
+    <div class="code-block">
+<pre><span class="cm">/* 1) IMPORT STAGING */</span>
+<span class="kw">TRUNCATE TABLE</span> dbo.Staging_Price;
+
+<span class="kw">BULK INSERT</span> dbo.Staging_Price
+<span class="kw">FROM</span> <span class="str">'C:\DATA20241104.csv'</span>
+<span class="kw">WITH</span> (FIRSTROW = <span class="num">2</span>, FIELDTERMINATOR = <span class="str">';'</span>, TABLOCK);
+
+<span class="cm">/* 2) NETTOYAGE — rejet des prix invalides */</span>
+<span class="kw">DELETE FROM</span> dbo.Staging_Price
+<span class="kw">WHERE</span> AppliedPrice &lt;= <span class="num">0</span> <span class="kw">OR</span> RecommendedPrice &lt;= <span class="num">0</span>;
+
+<span class="kw">DELETE FROM</span> dbo.Staging_Price
+<span class="kw">WHERE</span> AppliedPrice &gt; <span class="num">1000</span> <span class="kw">OR</span> RecommendedPrice &gt; <span class="num">1000</span>;
+
+<span class="cm">/* 3) LOG — traçabilité complète */</span>
+<span class="kw">INSERT INTO</span> dbo.ProcessLog (
+    FileName, FileDate, ImportedRows, RejectedRows,
+    CreatedOffers, UpdatedOffers, Status
+)
+<span class="kw">VALUES</span> (@file, @FileDate, @ImportedRows,
+        @RejectedRows, @CreatedOffers, @UpdatedOffers, <span class="str">'SUCCESS'</span>);</pre>
+    </div>
+  </div>
+
+  <!-- IDEMPOTENCE -->
+  <div class="section-block fade">
+    <h2>Sécurisation & idempotence</h2>
+    <p>Le système est conçu pour être <strong>relancé en toute sécurité</strong> :</p>
+    <ul>
+      <li>Un fichier déjà traité en <code style="font-family:var(--fm);color:var(--cyan)">SUCCESS</code> est automatiquement ignoré (skip)</li>
+      <li>Un <strong>index unique</strong> sur <code style="font-family:var(--fm);color:var(--cyan)">(StoreNumberID, EAN)</code> où <code style="font-family:var(--fm);color:var(--cyan)">PeriodEnd = 9999-12-31</code> garantit qu'une seule offre active par article/magasin</li>
+      <li>Chaque fichier est traité dans un bloc <strong>TRY/CATCH</strong> — une erreur sur un fichier n'interrompt pas le traitement des suivants</li>
+      <li>La <strong>Version 2</strong> traite plusieurs fichiers en boucle (cursor) avec gestion d'état par fichier</li>
+    </ul>
+  </div>
+
+  <!-- COMPÉTENCES -->
+  <div class="section-block fade">
+    <h2>Compétences développées</h2>
+    <div class="skills-grid">
+      <div class="skill-item">SQL Server T-SQL avancé</div>
+      <div class="skill-item">SCD Type 2 (historisation)</div>
+      <div class="skill-item">BULK INSERT & staging</div>
+      <div class="skill-item">Gestion des erreurs TRY/CATCH</div>
+      <div class="skill-item">Index unique & contraintes</div>
+      <div class="skill-item">Journalisation (ProcessLog)</div>
+      <div class="skill-item">Idempotence & skip logic</div>
+      <div class="skill-item">Modélisation BDD décisionnelle</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="resources-section">
+  <div class="resources-inner fade">
+    <h2>Ressources du projet</h2>
+    <div class="resource-btns">
+      <a href="../assets/asset_historisation_offres/Gestion automatisée des offres commerciales .docx" target="_blank" class="btn-resource btn-doc">
+        📄 Documentation complète
+      </a>
+      <a href="https://github.com/blemou19/sql-integration-historisation-offres" target="_blank" class="btn-resource btn-github">
+        🐙 Code source GitHub
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2026 · Rémy Blemou · <a href="../index.html" style="color:var(--cyan);text-decoration:none">← Retour au portfolio</a>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if(e.isIntersecting) setTimeout(() => e.target.classList.add('show'), i * 100);
+  });
+}, {threshold: 0.05});
+document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
